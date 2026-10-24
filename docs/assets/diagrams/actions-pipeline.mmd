@@ -1,0 +1,6 @@
+graph LR
+  A[Event: push / PR / 수동] --> B[Workflow: .yml]
+  B --> C[Runner: 실행 컴퓨터]
+  C --> D[Job: 작업 묶음]
+  D --> E[Step: Action 또는 명령]
+  E --> F[결과: 로그/Artifact/Check]

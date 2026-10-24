@@ -1,0 +1,119 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class=" active" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">D · 요구사항과 작업 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">07-B. Discussions와 Projects Status Updates: 논의와 보고의 분리<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<p>GitHub를 사용할 때 '모든 대화를 Issue로 만들면 되지 않을까?'라고 생각하기 쉽다. 그러나 아직 작업으로 확정되지 않은 논의, 이미 책임과 완료 조건이 정해진 작업, 프로젝트 전체의 현황 보고는 목적이 다르다.</p>
+<h2 id="section-2">B.1 어떤 정보는 어디에 두는가?<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>목적</th>
+  <th>추천 위치</th>
+  <th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>'전투 방식 A와 B 중 무엇을 택할까?'</td>
+  <td>Discord 회의 + 필요 시 Discussions</td>
+  <td>선택지가 열려 있는 논의</td>
+</tr>
+<tr>
+  <td>'회피 입력 시 무적 구간 구현'</td>
+  <td>Issue</td>
+  <td>담당자와 검증 기준이 존재</td>
+</tr>
+<tr>
+  <td>'이번 개발 주기의 전체 진척과 위험'</td>
+  <td>Projects Status Update</td>
+  <td>일정, 위험, 중요한 성과 공유</td>
+</tr>
+<tr>
+  <td>'AI 코드에서 중복 로직 발견'</td>
+  <td>Issue 또는 PR 리뷰</td>
+  <td>구체적인 수정·검토 대상</td>
+</tr>
+<tr>
+  <td>'게임 엔진 버전 선택 이유'</td>
+  <td>ADR(Repository 문서)</td>
+  <td>시간이 지나도 남아야 할 결정 근거</td>
+</tr>
+</tbody>
+</table>
+<p>여기서 <strong>단일 원본(Source of Truth)</strong>을 지켜야 한다. 같은 의사결정 결과를 Discord·Notion·Issues·Discussions 네 곳에서 각각 별도로 관리하면 서로 다른 버전이 생긴다.</p>
+<h2 id="section-3">B.2 GitHub Discussions란?<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<p>Discussions는 저장소나 조직에서 질문·아이디어·토론 등을 다루는 기능이다. 저장소 설정에 따라 Discussions를 활성화할 수 있다. 카테고리의 성격을 <code>General</code>, <code>Ideas</code>, <code>Q&amp;A</code>, <code>Announcements</code>, <code>Polls</code> 등으로 구분해서 운영할 수 있다.</p>
+<p><strong>생성 절차 예시</strong></p>
+<ol>
+<li>저장소 <code>Settings → General → Features</code>에서 Discussions 사용 여부를 확인한다.</li>
+<li>저장소의 <code>Discussions</code> 탭에서 카테고리를 살펴본다.</li>
+<li>필요하면 <code>Ideas</code>와 <code>Questions</code> 정도로 최소한의 카테고리를 구성한다.</li>
+<li>논의에 배경, 대안, 결정해야 할 질문, 종료 조건을 명확히 작성한다.</li>
+<li>결론이 난 뒤 구현이 필요하면 <strong>새 Issue를 만들고 Discussion에서 링크</strong>한다.</li>
+<li>최종 결정이 중요한 설계 원칙에 관한 것이면 ADR에 이유를 남긴다.</li>
+</ol>
+<blockquote>
+<p><strong>Discussions를 반드시 도입할 필요는 없다</strong>
+팀원들이 이미 Discord에 익숙하고 개발 기록은 Issues로 충분하다면 Discussions는 생략해도 좋다. 두 공간을 동시에 운영해서 오히려 논의가 분산된다면 이득이 없다.</p>
+</blockquote>
+<h3 id="section-4">토론 예시<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h3>
+<p><strong>제목</strong>: <code>기본 공격은 콤보형인가, 단발 집중형인가?</code></p>
+<ul>
+<li>결정할 질문: 첫 프로토타입에서 어떤 공격 조작을 사용할 것인가?</li>
+<li>후보: 단발 공격 / 3연타 콤보</li>
+<li>평가 기준: 구현량, 조작감 검증 가능성, 팀의 애니메이션 제작 능력</li>
+<li>관련 자료: 짧은 플레이 영상, 현재 기획 요약</li>
+<li>결정권자 및 기한: 전투 담당자와 게임 디렉터가 다음 리뷰 전에 결정</li>
+<li>결정 후 행동: 구현 Issue로 전환, 진행할 수 없는 안건은 이유와 함께 종료</li>
+</ul>
+<h2 id="section-5">B.3 Projects Status Updates는 작업 Status와 다르다<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<p>Projects의 <strong>개별 작업 <code>Status</code> 필드</strong>는 각 Issue가 <code>In Progress</code>, <code>Review</code>, <code>Done</code> 어디에 있는지를 표시한다. 반면 <strong>Project Status Update</strong>는 프로젝트 자체가 <code>On track</code>, <code>At risk</code> 등 어떤 상태인지를 설명하는 <strong>고수준 보고</strong>다.</p>
+<p>GitHub 공식 문서에서 Projects의 상태 업데이트는 프로젝트의 시작 날짜·목표 날짜·현재 상태·Markdown 메시지 등을 포함할 수 있으며, 프로젝트 패널에서 과거 기록을 확인할 수 있다고 설명한다.</p>
+<p><strong>상태 업데이트 작성 절차</strong></p>
+<ol>
+<li>Projects를 연다.</li>
+<li>프로젝트의 오른쪽 상단에서 사이드 패널을 연다.</li>
+<li><code>Status updates</code> 옆의 <code>Add update</code>를 선택한다.</li>
+<li>전체 상태와 필요한 날짜 정보를 정한다.</li>
+<li>이번 주 완료된 실제 결과물, 가장 큰 위험, 다음 결정 내용을 짧게 작성한다.</li>
+<li>저장하고 팀원에게 프로젝트 링크를 공유한다.</li>
+</ol>
+<p>프로젝트에 쓰기 권한이 있으면 업데이트할 수 있고, 읽기 권한으로도 보거나 구독할 수 있다. 프로젝트 템플릿 상태에서는 제한이 있을 수 있다. <a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates">공식 상태 업데이트 문서</a>를 참조한다.</p>
+<h3 id="section-6">3분 안에 읽히는 보고 예시<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h3>
+<pre><code class="language-markdown">상태: At risk
+기간: 이번 주
+
+완료된 결과물:
+- Windows 개발 빌드 0.3.4
+- 이동 / 회피 / 피격 연결 검증
+
+주요 위험:
+- 적 AI 담당 작업이 플레이어 감지 규칙을 기다리는 중
+
+필요한 결정:
+- 이번 주 보스 추가를 보류하고 일반 적 1종 통합을 우선할지 결정
+
+다음 확인 시점:
+- 금요일 통합 플레이 리뷰
+</code></pre>
+<p>이 방식은 모든 팀원이 매번 길게 개발 보고서를 다시 쓰는 것보다 부담이 적다. 다만 상태 업데이트가 <strong>Issue별 실제 검증</strong>을 대체하지는 않는다.</p>
+<h2 id="section-7">B.4 실제 회의에서 어떻게 연결하나?<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<p>회의 전에 팀장이 미완료 Issue·차단 항목·최근 빌드를 확인한다. 회의 중에는 <strong>하나의 Project 화면을 공유</strong>하고 새로 생긴 논의와 결정할 항목만 다룬다. 회의 이후에는 결정이 반영된 Issue를 생성/수정한다.</p>
+<ol>
+<li>회의 시작 5분: 이번 주 실제 빌드를 실행하고 공동 목표 재확인.</li>
+<li>10분: <code>Blocked</code>와 <code>Review</code> 작업부터 확인.</li>
+<li>10분: 필요한 설계·우선순위 결정.</li>
+<li>5분: 담당자, 다음 행동, 검증 기준 확인.</li>
+<li>회의 종료 후: 프로젝트 상태 업데이트를 남기고 관련 Issue 링크 첨부.</li>
+</ol>
+<h3 id="section-8">꼭 피해야 할 것<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>회의 전에 준비하지 않은 팀원에게 즉석에서 장시간 자료 조사를 요구하기.</li>
+<li>토론이 끝났는데 담당자와 완료 조건이 없는 상태로 회의를 종료하기.</li>
+<li>프로젝트 상태를 단순히 완료 Issue 개수로만 <code>On track</code> 판정하기.</li>
+<li>Discord 메시지를 공식 결론이라고 가정하면서 GitHub에는 전혀 남기지 않기.</li>
+</ul>
+<h2 id="section-9">B.5 실습<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<p>토론 주제 하나를 정해서 Discussion 또는 Discord에서 후보를 비교하고, 결과가 정해지면 구현 Issue 두 개를 등록한다. 그다음 프로젝트 전체 상태 업데이트를 한 건 작성한다. 팀원에게 <strong>'무엇을 결정했는지', '내 할 일은 어디에 있는지', '프로젝트는 왜 위험 상태인지'</strong> 설명해 보라고 한다.</p>
+<p><strong>공식 자료</strong>: <a href="https://docs.github.com/en/discussions">Discussions 개요</a> · <a href="https://docs.github.com/en/discussions/managing-discussions-for-your-community/managing-categories-for-discussions">Discussions 카테고리</a> · <a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates">Projects 상태 보고</a></p>
+</article><nav class="bottom-nav"><a href="../part-d/07a-notifications.html">← 07-A 알림 관리</a><a href="../part-e/08-actions.html">08 GitHub Actions →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">B.1 어떤 정보는 어디에 두는가?</a><a class="level2" href="#section-3">B.2 GitHub Discussions란?</a><a class="level3" href="#section-4">토론 예시</a><a class="level2" href="#section-5">B.3 Projects Status Updates는 작업 Status와 다르다</a><a class="level3" href="#section-6">3분 안에 읽히는 보고 예시</a><a class="level2" href="#section-7">B.4 실제 회의에서 어떻게 연결하나?</a><a class="level3" href="#section-8">꼭 피해야 할 것</a><a class="level2" href="#section-9">B.5 실습</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

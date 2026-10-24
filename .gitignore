@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.cache/
+# MkDocs 생성 결과, 오프라인 HTML 배포본은 의도적으로 추적 가능
+# site/ directory may be tracked as a ready-to-read offline edition.
+
+# MkDocs build output (offline reader in site/ is separate)
+_mkdocs_site/

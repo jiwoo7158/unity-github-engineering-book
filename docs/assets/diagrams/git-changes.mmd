@@ -1,0 +1,5 @@
+graph LR
+  A[작업 폴더: 수정 중] -->|git add| B[스테이징: 이번 커밋 대상]
+  B -->|git commit| C[로컬 이력]
+  C -->|git push| D[GitHub 원격 저장소]
+  D -->|git fetch 또는 pull| C

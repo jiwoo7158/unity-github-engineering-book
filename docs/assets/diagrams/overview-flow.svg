@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="708" height="438" viewBox="0 0 708 438" role="img" aria-label="overview flow">
+<title>overview flow</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 Z" fill="#5F7D9A"/></marker></defs>
+<path d="M 334 52.0 L 367 52.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 532.0 90 L 532.0 115" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 372 158.0 L 339 158.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 174.0 196 L 174.0 221" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 334 264.0 L 367 264.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 532.0 302 L 532.0 327" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 372 370.0 L 339 370.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="22" y="22" width="304" height="60" rx="13" fill="#E3F1FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="58" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">기획과 요구사항</text>
+<rect x="380" y="22" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="58" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">GitHub Issue</text>
+<rect x="380" y="128" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="164" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">담당자와 브랜치</text>
+<rect x="22" y="128" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="164" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Pull Request</text>
+<rect x="22" y="234" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="270" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Actions 검사</text>
+<rect x="380" y="234" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="270" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">리뷰와 실제 플레이 검증</text>
+<rect x="380" y="340" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="376" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">병합과 릴리스</text>
+<rect x="22" y="340" width="304" height="60" rx="13" fill="#DDF1E6" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="376" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">피드백과 다음 Issue</text>
+</svg>

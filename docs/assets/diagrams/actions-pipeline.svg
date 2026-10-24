@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="708" height="332" viewBox="0 0 708 332" role="img" aria-label="actions pipeline">
+<title>actions pipeline</title>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 Z" fill="#5F7D9A"/></marker></defs>
+<path d="M 334 52.0 L 367 52.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 532.0 90 L 532.0 115" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 372 158.0 L 339 158.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 174.0 196 L 174.0 221" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<path d="M 334 264.0 L 367 264.0" fill="none" stroke="#5F7D9A" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="22" y="22" width="304" height="60" rx="13" fill="#E3F1FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="58" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Event: push / PR / 수동</text>
+<rect x="380" y="22" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="58" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Workflow: .yml</text>
+<rect x="380" y="128" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="164" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Runner: 실행 컴퓨터</text>
+<rect x="22" y="128" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="164" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Job: 작업 묶음</text>
+<rect x="22" y="234" width="304" height="60" rx="13" fill="#F0F5FC" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="174.0" y="270" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">Step: Action 또는 명령</text>
+<rect x="380" y="234" width="304" height="60" rx="13" fill="#DDF1E6" stroke="#ABC5DE" stroke-width="1.5"/>
+<text x="532.0" y="270" text-anchor="middle" font-family="Noto Sans CJK KR, Malgun Gothic, sans-serif" font-size="16" font-weight="550" fill="#203B59">결과: 로그/Artifact/Check</text>
+</svg>

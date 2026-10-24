@@ -1,0 +1,71 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class=" active" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">참고 자료 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<p>이 교재는 Markdown 원본인 <code>docs/</code> 폴더와 사이트 설정인 <code>mkdocs.yml</code>을 기본 구조로 한다. <strong>MkDocs는 Markdown을 HTML 사이트로 만드는 도구</strong>이고 <strong>Material for MkDocs는 그 사이트의 테마</strong>다. GitHub Pages는 만들어진 HTML을 웹에서 제공하는 GitHub의 정적 웹 호스팅 서비스다.</p>
+<h2 id="section-2">1. 설치 없이 읽기<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>책 ZIP의 <code>site/index.html</code>을 브라우저로 열면 오프라인용 HTML 목차에서 각 장으로 이동할 수 있다. 이 HTML은 별도 정적 변환본이며, 온라인 MkDocs Material 사이트와 인터페이스가 완전히 같지는 않다. Markdown 원본이 필요하면 <code>BOOK.md</code>를 VS Code의 Markdown Preview로 열 수 있다.</p>
+<h2 id="section-3">2. MkDocs 로컬 미리보기<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>Python 3.10 이상 설치.</li>
+<li>책 저장소 폴더 열기.</li>
+<li>가상환경 생성 및 패키지 설치.</li>
+</ol>
+<p>Windows PowerShell:</p>
+<pre><code class="language-powershell">python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m mkdocs serve
+</code></pre>
+<p>가상환경 실행 정책 때문에 활성화가 어려우면 <code>.venv\Scripts\python.exe -m pip install -r requirements.txt</code>처럼 가상환경의 Python을 직접 사용할 수도 있다.</p>
+<p>macOS/Linux:</p>
+<pre><code class="language-bash">python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m mkdocs serve
+</code></pre>
+<p>명령 실행 결과에 출력되는 로컬 주소(통상 <code>http://127.0.0.1:8000</code>)를 브라우저에서 연다. 저장한 Markdown 변경은 개발 서버에서 다시 반영될 수 있다.</p>
+<h2 id="section-4">3. 정적 파일 빌드<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<pre><code class="language-bash">python -m mkdocs build --strict --site-dir _pages
+</code></pre>
+<p>이 명령은 검색 색인·스타일·HTML 페이지를 <code>_pages/</code>에 생성한다. <code>--strict</code>는 경고를 오류로 취급하므로 메뉴 경로·문서 링크 등을 검증하는 데 도움이 된다. 이 책의 사이트 설정은 <code>mkdocs.yml</code>에 들어 있다.</p>
+<h2 id="section-5">4. GitHub Pages로 게시하기<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>새 GitHub 저장소를 만들고 본 교재의 파일(숨겨진 <code>.github</code> 포함)을 업로드한다.</li>
+<li><code>mkdocs.yml</code>의 아래 값을 자신의 저장소로 교체한다.</li>
+</ol>
+<pre><code class="language-yaml">site_url: https://YOUR_ACCOUNT.github.io/YOUR_REPOSITORY/
+repo_url: https://github.com/YOUR_ACCOUNT/YOUR_REPOSITORY
+repo_name: YOUR_ACCOUNT/YOUR_REPOSITORY
+</code></pre>
+<ol start="3">
+<li>저장소에서 <code>Settings → Pages</code>로 이동한다.</li>
+<li><code>Build and deployment → Source</code>를 <strong>GitHub Actions</strong>로 선택한다.</li>
+<li><code>Actions → Publish book to GitHub Pages</code>에서 <strong>Run workflow</strong>를 누르거나 <code>main</code>에 문서 변경을 푸시한다.</li>
+<li><code>Actions</code> 실행이 완료되면 <code>Settings → Pages</code>의 게시 URL을 연다.</li>
+</ol>
+<p>배포 Workflow는 <code>.github/workflows/docs-pages.yml</code> 파일로 제공한다. <strong>이 Workflow는 책의 문서를 게시하는 용도</strong>이며 Unity 게임의 빌드·테스트를 실행하지 않는다.</p>
+<h3 id="section-6">Workflow의 주요 동작<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>저장소를 체크아웃한다.</li>
+<li>Python을 준비한다.</li>
+<li><code>requirements.txt</code>의 MkDocs Material을 설치한다.</li>
+<li><code>mkdocs build --strict</code>로 문서를 빌드한다.</li>
+<li><code>upload-pages-artifact</code>로 게시할 파일을 올린다.</li>
+<li><code>deploy-pages</code>로 GitHub Pages에 배포한다.</li>
+</ul>
+<h2 id="section-7">5. 게시할 때 주의할 점<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><strong>공개 범위:</strong> GitHub Pages는 웹 페이지를 게시하는 서비스다. 저장소가 Private이어도 웹사이트 공개 범위는 별도 정책이 적용될 수 있으니 기밀 내용을 넣지 않는다.</li>
+<li><strong>분리 권장:</strong> 실제 게임 저장소와 학습 교재 저장소를 분리하면 대용량 에셋/라이선스/접근 권한 관리가 쉬워진다.</li>
+<li><strong>LFS:</strong> Pages에서 LFS 원본 파일을 웹사이트 리소스처럼 직접 제공하는 구성은 적절하지 않다. 책에는 일반 이미지/작은 정적 파일만 사용한다.</li>
+<li><strong>브랜치:</strong> 제공 Workflow는 기본 브랜치 <code>main</code>을 기준으로 작성했다. 다른 브랜치를 사용하면 수정한다.</li>
+<li><strong>검증:</strong> 이 환경에서는 외부 패키지를 설치할 네트워크를 사용할 수 없어 실제 MkDocs CLI 빌드를 수행하지 못했다. 대신 Markdown 구조·내부 링크·정적 오프라인 HTML을 검증했다. 게시 전 실제 GitHub Actions 결과를 확인한다.</li>
+</ul>
+<h2 id="section-8">6. 수정·확장 방법<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h2>
+<p>본문은 <code>docs/part-a</code>에서 <code>docs/part-f</code> 및 <code>docs/appendix</code>에 있으며, 목차 순서는 <code>mkdocs.yml → nav</code>에서 수정한다. 장을 추가할 때는 원고 작성→목차 등록→로컬 <code>mkdocs build --strict</code>→PR 검토→Pages 게시 순서로 진행한다. <code>BOOK.md</code>와 오프라인 <code>site/</code>는 함께 제공된 생성 스크립트를 실행해 다시 만들 수 있다(생성 환경에 <code>mistune</code> 필요).</p>
+<p><strong>공식 자료:</strong> <a href="https://squidfunk.github.io/mkdocs-material/creating-your-site/">MkDocs Material</a>, <a href="https://squidfunk.github.io/mkdocs-material/publishing-your-site/">Material 게시</a>, <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">GitHub Pages 구성</a></p>
+<h2 id="section-9">흐름도(Mermaid)가 코드 블록으로 표시되는 문제<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<p>초기 오프라인 HTML 생성기에서는 Mermaid를 일반 코드 블록으로 출력하는 문제가 있었다. 수정판에서는 편집용 원본을 <code>docs/assets/diagrams/*.mmd</code>로 보존하고, 문서 본문은 미리 렌더링한 <code>*.svg</code>를 참조한다. 따라서 MkDocs·GitHub·로컬 HTML에서도 JavaScript 없이 흐름도가 표시된다.</p>
+<p>SVG 그림 내용을 바꾸려면 Graphviz의 <code>dot</code> 명령이 설치된 환경에서 <code>python scripts/render_diagrams.py</code>를 실행한 후, <code>python scripts/build_offline.py</code>와 <code>python scripts/build_single_html.py</code>를 다시 실행한다. 이미 생성된 SVG를 읽는 데 Graphviz 설치는 필요 없다.</p>
+</article><nav class="bottom-nav"><a href="../appendix/references.html">← 공식 문서와 검증 범위</a><span></span></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">1. 설치 없이 읽기</a><a class="level2" href="#section-3">2. MkDocs 로컬 미리보기</a><a class="level2" href="#section-4">3. 정적 파일 빌드</a><a class="level2" href="#section-5">4. GitHub Pages로 게시하기</a><a class="level3" href="#section-6">Workflow의 주요 동작</a><a class="level2" href="#section-7">5. 게시할 때 주의할 점</a><a class="level2" href="#section-8">6. 수정·확장 방법</a><a class="level2" href="#section-9">흐름도(Mermaid)가 코드 블록으로 표시되는 문제</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

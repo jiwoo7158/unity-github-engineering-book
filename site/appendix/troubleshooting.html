@@ -1,0 +1,174 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class=" active" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">참고 자료 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">부록 A. 자주 발생하는 문제와 해결 순서<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<p>이 장은 증상에서 바로 원인을 추정하지 않고, <strong>확인할 사실 → 조사 명령·위치 → 안전한 대응</strong> 순서로 구성했다.</p>
+<h2 id="section-2">Git과 GitHub<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>증상</th>
+  <th>먼저 확인할 것</th>
+  <th>대응 원칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Commit은 했는데 GitHub에 없음</td>
+  <td><code>git status -sb</code>, <code>git remote -v</code>, <code>git log</code></td>
+  <td>Push했는지 확인</td>
+</tr>
+<tr>
+  <td><code>remote origin already exists</code></td>
+  <td><code>git remote -v</code></td>
+  <td>중복 추가 대신 <code>set-url</code> 검토</td>
+</tr>
+<tr>
+  <td><code>non-fast-forward</code> Push 거절</td>
+  <td>원격 커밋 존재 여부</td>
+  <td>Fetch 후 이력 비교, 무작정 force 금지</td>
+</tr>
+<tr>
+  <td>Pull 시 충돌</td>
+  <td><code>git status</code>, 충돌 파일</td>
+  <td>양쪽 의도 확인 후 병합</td>
+</tr>
+<tr>
+  <td>잘못된 파일을 스테이징</td>
+  <td><code>git diff --staged</code></td>
+  <td><code>git restore --staged 파일</code></td>
+</tr>
+<tr>
+  <td>커밋한 파일을 되돌리고 싶음</td>
+  <td>Push 여부, 협업 여부</td>
+  <td>공유 이력이면 <code>git revert</code> 우선</td>
+</tr>
+<tr>
+  <td>GitHub 권한 없음</td>
+  <td>계정, 저장소 권한, 토큰</td>
+  <td>최소 권한으로 인증 재확인</td>
+</tr>
+<tr>
+  <td>큰 파일 Push 거절</td>
+  <td>파일 용량과 기존 이력</td>
+  <td>LFS 정책 검토, 필요 시 별도 마이그레이션</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-3">Unity 프로젝트<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<h3 id="section-4">Clone 후 Unity가 프로젝트를 열지 못함<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h3>
+<ol>
+<li>저장소 루트에 <code>Assets</code>, <code>Packages</code>, <code>ProjectSettings</code>가 있는지 확인한다.</li>
+<li><code>ProjectSettings/ProjectVersion.txt</code>의 Editor 버전이 실제 설치 버전과 일치하는지 확인한다.</li>
+<li>Git LFS 사용 프로젝트인지 확인하고 <code>git lfs ls-files</code>와 원본 파일 다운로드 상태를 점검한다.</li>
+<li>Package Manager 오류 및 사설 레지스트리 인증을 확인한다.</li>
+<li>Unity Editor 로그를 읽고, <strong>테스트 사본</strong>에서만 캐시 초기화 등을 수행한다.</li>
+</ol>
+<h3 id="section-5">Missing Script / Missing Material<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li><code>.meta</code>가 삭제되거나 GUID가 변경되었는지 <code>git diff</code>로 확인한다.</li>
+<li>에셋이 <code>Assets</code> 밖으로 옮겨졌는지 확인한다.</li>
+<li>스크립트의 컴파일 에러·네임스페이스·어셈블리 참조를 검사한다.</li>
+<li>Package Manager에 필요한 패키지가 복원되었는지 확인한다.</li>
+<li>씬/프리팹 병합 시 의도치 않게 참조가 제거되었는지 살펴본다.</li>
+</ul>
+<h3 id="section-6">씬 Merge 후 게임 오브젝트가 사라짐<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h3>
+<ol>
+<li>해당 파일의 양쪽 커밋과 병합 전 상태를 확인한다.</li>
+<li>가능하다면 UnityYAMLMerge를 활용한다.</li>
+<li>Unity Editor에서 씬을 다시 열고 문제 오브젝트와 컴포넌트를 점검한다.</li>
+<li>복구 가능한 커밋 또는 저장된 작업 사본을 이용해 손상된 참조를 재구성한다.</li>
+<li>단일 씬 동시 수정을 줄이는 구조 개선 작업을 기록한다.</li>
+</ol>
+<h2 id="section-7">Git LFS<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<h3 id="section-8">Pointer 내용이 실제 파일처럼 열림<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h3>
+<p><code>git lfs version</code>, <code>git lfs ls-files</code>, <code>git lfs fetch</code>, <code>git lfs checkout</code>을 확인한다. 호스팅 스토리지 권한·요금·전송 한도도 점검한다. LFS가 비활성화된 환경에서는 실제 바이너리 대신 포인터 텍스트만 받을 수 있다.</p>
+<h3 id="section-9">기존 큰 파일이 Git 이력에 남아 있음<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h3>
+<p><code>git lfs track</code>은 기존 전체 이력을 자동 변경하지 않는다. 대형 이력 정리나 <code>git lfs migrate</code>는 원격·팀원 클론에 영향을 주므로 원본 백업, 중단 시간, Force Push 여부를 계획한 뒤 수행한다.</p>
+<h2 id="section-10">Issues와 Projects<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h2>
+<h3 id="section-11">Issue가 Projects에 보이지 않음<a class="heading-link" href="#section-11" aria-label="이 단락 링크">#</a></h3>
+<ol>
+<li>Issue가 Project에 추가되어 있는지 확인한다.</li>
+<li>Auto-add Workflow의 저장소·필터·활성 상태를 확인한다.</li>
+<li>현재 View 필터(<code>assignee</code>, <code>iteration</code>, <code>status</code>)가 해당 Issue를 숨기고 있지 않은지 확인한다.</li>
+<li>사용자와 Project의 접근 권한을 확인한다.</li>
+</ol>
+<h3 id="section-12">Issue가 닫혔는데 QA는 아직 끝나지 않음<a class="heading-link" href="#section-12" aria-label="이 단락 링크">#</a></h3>
+<p>프로젝트 기본 워크플로가 Done으로 변경했을 수 있다. <strong>코드 완료와 게임플레이 검증 완료를 분리</strong>하는 정책을 도입하거나, Issue의 자동 닫기 키워드 사용을 조정한다.</p>
+<h3 id="section-13">팀원에게 아무 작업도 보이지 않음<a class="heading-link" href="#section-13" aria-label="이 단락 링크">#</a></h3>
+<p><code>assignee:@me</code> 필터에 해당하는 Issue가 존재하는지, 실제 할당이 되었는지, 다른 프로젝트에서 생성되지는 않았는지, 저장소 읽기 권한이 있는지 확인한다.</p>
+<h2 id="section-14">Actions<a class="heading-link" href="#section-14" aria-label="이 단락 링크">#</a></h2>
+<h3 id="section-15">Actions 탭에서 수동 실행 버튼이 안 보임<a class="heading-link" href="#section-15" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>파일이 <code>.github/workflows/</code> 안의 YAML인지 확인한다.</li>
+<li><code>workflow_dispatch</code>가 선언되어 있는지 확인한다.</li>
+<li>일반적으로 기본 브랜치에서 해당 워크플로가 인식되어야 한다는 조건과 사용자 권한을 확인한다.</li>
+<li>YAML 문법을 검사한다.</li>
+</ul>
+<h3 id="section-16">Job이 대기(Queued) 상태임<a class="heading-link" href="#section-16" aria-label="이 단락 링크">#</a></h3>
+<p>Runner 레이블과 실제 연결된 Runner, 동시 실행 한도, 조직 정책을 확인한다. Self-hosted Runner가 꺼져 있거나 <code>runs-on</code> 레이블이 일치하지 않으면 시작되지 않을 수 있다.</p>
+<h3 id="section-17">Workflow는 성공했는데 게임 빌드 파일이 없음<a class="heading-link" href="#section-17" aria-label="이 단락 링크">#</a></h3>
+<p>테스트만 수행한 것은 아닌지, 빌드 출력 경로가 다른지, Artifact <code>path</code>가 실제 파일을 가리키는지 확인한다. 빈 Artifact 업로드를 성공으로 처리하지 않도록 <code>if-no-files-found: error</code> 등을 적용한다.</p>
+<h3 id="section-18">Unity CI에서 에디터 실행 실패<a class="heading-link" href="#section-18" aria-label="이 단락 링크">#</a></h3>
+<p>정확한 Unity 버전, 플랫폼 모듈, 유효한 라이선스 활성화, OS, Editor 경로, 권한을 확인한다. 테스트 실패와 에디터 실행 실패를 분리해서 로그를 수집한다.</p>
+<h3 id="section-19">GitHub Pages가 게시되지 않음<a class="heading-link" href="#section-19" aria-label="이 단락 링크">#</a></h3>
+<p><code>Settings → Pages → Source: GitHub Actions</code>를 확인한다. Actions 실행에서 MkDocs 빌드 실패와 <code>deploy-pages</code> 권한·환경 오류를 구분하고, <code>mkdocs.yml</code>의 <code>site_url</code> 및 경로 설정을 확인한다. 공개 범위와 요금 정책도 확인한다.</p>
+<h2 id="section-20">문제 분석 기록 양식<a class="heading-link" href="#section-20" aria-label="이 단락 링크">#</a></h2>
+<pre><code class="language-markdown"># 문제 제목
+- 발생 위치/기능:
+- 저장소/브랜치/Commit SHA:
+- Unity 버전 / OS:
+- 실행 또는 빌드 번호:
+- 재현 절차:
+- 기대 결과:
+- 실제 결과:
+- 에러 로그(민감 정보 제외):
+- 확인한 가설과 결과:
+- 수정 방법:
+- 회귀 테스트 결과:
+</code></pre>
+<p>문제가 반복된다면 해결 후 관련 Issue를 닫기 전에 재발 방지 규칙·테스트가 추가되었는지 확인한다.</p>
+<h2 id="section-21">확장판 추가 진단<a class="heading-link" href="#section-21" aria-label="이 단락 링크">#</a></h2>
+<h3 id="section-22">Notifications에 아무것도 나오지 않는다<a class="heading-link" href="#section-22" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>작업이 실제 내 GitHub 계정에 할당되었는지 확인한다.</li>
+<li><code>@mention</code> 이름이 정확한지 확인한다.</li>
+<li>해당 Issue/PR에 접근할 권한이 있는지 확인한다.</li>
+<li>알림 설정에서 웹·이메일·모바일 수신 설정을 점검한다.</li>
+<li>해당 대화의 구독/구독 해제 상태를 확인한다.</li>
+</ul>
+<h3 id="section-23">Projects에 새 Issue가 자동으로 추가되지 않는다<a class="heading-link" href="#section-23" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>프로젝트의 <code>Workflows → Auto-add</code>를 활성화했는지 확인한다.</li>
+<li>대상 Repository와 조건 필터가 올바른지 확인한다.</li>
+<li>필터에서 지정한 Label이 Issue에 있는지 확인한다.</li>
+<li>자동화 적용 <strong>이전부터 존재한 Issue</strong>는 소급해 추가되지 않을 수 있다. 새 테스트 Issue로 검증한다.</li>
+<li>플랜별 Auto-add 제한과 접근 권한을 확인한다.</li>
+</ul>
+<h3 id="section-24">PR 체크는 통과했는데 게임에서 버그가 발생한다<a class="heading-link" href="#section-24" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>Workflow가 정말 Unity 테스트·빌드를 수행했는지 확인한다. 단순한 README 검사였을 수 있다.</li>
+<li>PR의 검사 대상 브랜치와 실제 병합한 소스 버전을 확인한다.</li>
+<li>Unity Editor 실행, Play Mode, 실제 Player 빌드에서 재현되는지 구분한다.</li>
+<li>해당 문제를 버그 Issue로 기록하고, 자동 테스트로 재현 가능한 부분을 따로 작성한다.</li>
+</ul>
+<h3 id="section-25">Actions가 Permission 오류를 낸다<a class="heading-link" href="#section-25" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>Workflow/Job의 <code>permissions</code> 범위를 점검한다.</li>
+<li>PR의 출처가 포크인지, 외부 사용자가 실행한 이벤트인지 확인한다.</li>
+<li>Organization/Repository의 Actions 정책과 토큰 설정을 확인한다.</li>
+<li>원인을 모른 채 높은 권한이나 Secrets를 추가하지 않는다.</li>
+</ul>
+<h3 id="section-26">Dependabot이 Unity 패키지 취약점을 표시하지 않는다<a class="heading-link" href="#section-26" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li>Unity Package Manager나 Asset Store 패키지가 자동으로 지원된다고 가정하지 않는다.</li>
+<li>공식 지원 생태계 목록을 확인한다.</li>
+<li>Unity 패키지 버전과 보안 공지는 별도로 검토한다.</li>
+</ul>
+<h3 id="section-27">단일 HTML에서는 링크가 이상하다<a class="heading-link" href="#section-27" aria-label="이 단락 링크">#</a></h3>
+<ul>
+<li><code>single-book.html</code>은 단일 파일이며 목차 이동은 문서 내부 앵커를 사용한다.</li>
+<li>오프라인 장별 사이트는 <code>site/index.html</code>에서 시작해 폴더 구조를 통째로 유지해야 한다.</li>
+<li>MkDocs 배포는 제공된 GitHub Pages Workflow와 <code>mkdocs.yml</code>의 URL을 별도 확인한다.</li>
+</ul>
+</article><nav class="bottom-nav"><a href="../appendix/integrated-lab.html">← 종합 실습</a><a href="../appendix/glossary.html">용어 사전 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">Git과 GitHub</a><a class="level2" href="#section-3">Unity 프로젝트</a><a class="level3" href="#section-4">Clone 후 Unity가 프로젝트를 열지 못함</a><a class="level3" href="#section-5">Missing Script / Missing Material</a><a class="level3" href="#section-6">씬 Merge 후 게임 오브젝트가 사라짐</a><a class="level2" href="#section-7">Git LFS</a><a class="level3" href="#section-8">Pointer 내용이 실제 파일처럼 열림</a><a class="level3" href="#section-9">기존 큰 파일이 Git 이력에 남아 있음</a><a class="level2" href="#section-10">Issues와 Projects</a><a class="level3" href="#section-11">Issue가 Projects에 보이지 않음</a><a class="level3" href="#section-12">Issue가 닫혔는데 QA는 아직 끝나지 않음</a><a class="level3" href="#section-13">팀원에게 아무 작업도 보이지 않음</a><a class="level2" href="#section-14">Actions</a><a class="level3" href="#section-15">Actions 탭에서 수동 실행 버튼이 안 보임</a><a class="level3" href="#section-16">Job이 대기(Queued) 상태임</a><a class="level3" href="#section-17">Workflow는 성공했는데 게임 빌드 파일이 없음</a><a class="level3" href="#section-18">Unity CI에서 에디터 실행 실패</a><a class="level3" href="#section-19">GitHub Pages가 게시되지 않음</a><a class="level2" href="#section-20">문제 분석 기록 양식</a><a class="level2" href="#section-21">확장판 추가 진단</a><a class="level3" href="#section-22">Notifications에 아무것도 나오지 않는다</a><a class="level3" href="#section-23">Projects에 새 Issue가 자동으로 추가되지 않는다</a><a class="level3" href="#section-24">PR 체크는 통과했는데 게임에서 버그가 발생한다</a><a class="level3" href="#section-25">Actions가 Permission 오류를 낸다</a><a class="level3" href="#section-26">Dependabot이 Unity 패키지 취약점을 표시하지 않는다</a><a class="level3" href="#section-27">단일 HTML에서는 링크가 이상하다</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

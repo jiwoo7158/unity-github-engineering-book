@@ -1,0 +1,170 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class=" active" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">B · Unity 프로젝트 관리 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">03. Unity 프로젝트를 GitHub에 업로드하기<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<h2 id="section-2">3.1 Unity 프로젝트는 일반 소스 저장소와 무엇이 다른가?<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>Unity는 C# 코드뿐 아니라 씬, 프리팹, 머티리얼, 텍스처, 애니메이션, 오디오, 패키지 설정, 임포트 정보 등 다양한 자산을 참조한다. 파일의 <strong>이름과 경로</strong>뿐 아니라 <code>.meta</code> 안의 <strong>GUID</strong>를 사용해 참조를 유지한다. 따라서 스크립트 몇 개만 올려서는 프로젝트를 완전히 복원할 수 없다. Unity 저장소의 성공 기준은 <strong>다른 컴퓨터 또는 깨끗한 폴더에서 Clone한 뒤 동일한 에디터 버전으로 열고 게임을 실행할 수 있는가</strong>다.</p>
+<h3 id="section-3">핵심 프로젝트 폴더<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h3>
+<table>
+<thead>
+<tr>
+  <th>경로</th>
+  <th>역할</th>
+  <th>일반적 Git 처리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>Assets/</code></td>
+  <td>코드·씬·프리팹·리소스와 <code>.meta</code></td>
+  <td>추적</td>
+</tr>
+<tr>
+  <td><code>Packages/manifest.json</code></td>
+  <td>패키지 직접 의존성</td>
+  <td>추적</td>
+</tr>
+<tr>
+  <td><code>Packages/packages-lock.json</code></td>
+  <td>패키지 해결·고정 정보</td>
+  <td>대체로 추적</td>
+</tr>
+<tr>
+  <td><code>Packages/</code> 로컬 패키지</td>
+  <td>저장소에 포함하는 로컬 패키지</td>
+  <td>패키지 설계에 따라 추적</td>
+</tr>
+<tr>
+  <td><code>ProjectSettings/</code></td>
+  <td>프로젝트 전역 설정·에디터 버전</td>
+  <td>추적</td>
+</tr>
+<tr>
+  <td><code>UserSettings/</code></td>
+  <td>개인별 에디터 설정</td>
+  <td>대개 제외</td>
+</tr>
+<tr>
+  <td><code>Library/</code></td>
+  <td>Unity 임포트 캐시·생성 정보</td>
+  <td>제외</td>
+</tr>
+<tr>
+  <td><code>Temp/</code>, <code>Obj/</code>, <code>Logs/</code></td>
+  <td>임시·중간 산출물</td>
+  <td>제외</td>
+</tr>
+<tr>
+  <td><code>Build/</code>, <code>Builds/</code></td>
+  <td>게임 빌드 산출물</td>
+  <td>통상 별도 보관</td>
+</tr>
+</tbody>
+</table>
+<p>Unity 버전에 따라 <code>ProjectSettings</code> 설정 메뉴와 자동 생성 폴더의 세부 구조가 달라질 수 있다. 프로젝트에서 실제 발생하는 파일을 확인하고 공식 <code>Unity.gitignore</code>를 기초로 수정한다.</p>
+<h2 id="section-4">3.2 <code>.meta</code> 파일과 GUID<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<p><code>Assets/Art/Sword.fbx</code>가 있으면 Unity는 보통 <code>Sword.fbx.meta</code> 파일을 만든다. <code>.meta</code>에는 GUID 및 임포트 관련 메타데이터가 들어 있다. 프리팹이 이 에셋을 참조할 때 GUID가 중요하므로 원본만 Git에 올리고 <code>.meta</code>를 빠뜨리면 참조가 깨질 수 있다.</p>
+<p><strong>안전한 규칙</strong></p>
+<ol>
+<li><code>Assets</code> 안의 에셋을 이동·이름 변경할 때는 가능한 한 Unity Editor의 Project 창에서 처리한다.</li>
+<li>파일 시스템에서 직접 이동하는 경우 해당 <code>.meta</code> 파일도 함께 이동되는지 확인한다.</li>
+<li><code>.meta</code>는 전부 무시하는 규칙(<code>*.meta</code>)을 만들지 않는다.</li>
+<li>파일을 삭제할 때 고아 <code>.meta</code>가 남지 않았는지 확인한다.</li>
+<li>GUID가 갑자기 바뀌거나 같은 GUID가 중복되면 참조 문제를 우선 조사한다.</li>
+</ol>
+<p>C# 스크립트에도 <code>.meta</code>가 붙는다. 이름만 같게 새 파일을 만들었다고 기존 Unity 참조가 자동 보존되는 것은 아니다.</p>
+<h2 id="section-5">3.3 에디터 및 직렬화 설정<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<p>Unity Editor의 <code>Edit → Project Settings → Editor</code>에서 관련 항목을 확인한다. 버전에 따라 UI 표기가 달라질 수 있으므로 설치된 Unity의 매뉴얼을 함께 본다.</p>
+<ul>
+<li><strong>Visible Meta Files</strong>: <code>.meta</code> 파일을 외부 버전 관리에 적절한 형태로 노출한다. 현대 Unity 버전에서 일부 선택 항목이 이전 버전과 다르게 보일 수 있다.</li>
+<li><strong>Asset Serialization / Force Text</strong>: 가능한 씬·프리팹·에셋을 텍스트 기반으로 저장해 변경 비교·병합 가능성을 높인다. 모든 에셋이 텍스트로 바뀌는 것은 아니다.</li>
+<li><strong>Unity 에디터 버전</strong>: <code>ProjectSettings/ProjectVersion.txt</code>에 기록된다. 팀원은 일치하는 버전을 Unity Hub로 설치한다.</li>
+<li><strong>스크립팅 환경</strong>: API 호환성 수준, Define Symbols, 플랫폼별 설정의 차이가 빌드 실패 원인이 될 수 있다.</li>
+</ul>
+<h2 id="section-6">3.4 <code>.gitignore</code>를 설정하는 방법<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<p><a href="https://github.com/github/gitignore/blob/main/Unity.gitignore">GitHub의 Unity.gitignore</a>를 기반으로 저장소 루트에 <code>.gitignore</code>를 만든다. 아래는 <strong>설명용 최소 예시</strong>로, 실제로는 최신 공식 템플릿을 적용해야 한다.</p>
+<pre><code class="language-gitignore">[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Bb]uild/
+[Bb]uilds/
+.vs/
+.idea/
+*.csproj
+*.sln
+</code></pre>
+<p>위 예시에는 패키지와 플랫폼별 예외가 모두 포함되어 있지 않다. 또 <code>.sln</code> 및 <code>.csproj</code>를 팀이 의도적으로 보관하는 경우엔 제외 규칙을 조정한다. <code>.gitignore</code>는 신규 <strong>미추적 파일</strong>에 적용되므로 이미 <code>Library</code>를 커밋해 버렸다면 다음처럼 추적을 해제해야 할 수 있다.</p>
+<pre><code class="language-bash"># 원본 파일을 로컬 디스크에서 삭제하지 않고 Git 추적에서 제외
+git rm -r --cached Library
+git add .gitignore
+git commit -m &quot;Stop tracking generated Unity cache&quot;
+</code></pre>
+<p><code>git rm --cached</code>의 대상 범위를 잘못 지정하면 의도치 않은 파일이 다음 커밋에서 저장소에서 삭제될 수 있다. 항상 <code>git status</code>와 <code>git diff --staged --stat</code>을 확인한다.</p>
+<h2 id="section-7">3.5 Unity 프로젝트 최초 업로드: 새 프로젝트<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>Unity Hub에서 정확한 에디터 버전을 선택하고 <code>AsterArena</code> 프로젝트를 만든다.</li>
+<li>프로젝트를 한 번 실행하고 씬 저장·컴파일이 정상인지 확인한다.</li>
+<li>Unity Editor를 닫는다. 첫 설정 시 불필요한 파일 변동을 줄이기 위함이다.</li>
+<li>프로젝트 루트에 <code>.gitignore</code>, <code>.gitattributes</code>(필요시), <code>README.md</code>를 만든다.</li>
+<li>Git 초기화 후 상태를 확인한다.</li>
+</ol>
+<pre><code class="language-bash">cd &quot;C:/Work/AsterArena&quot;
+git init
+git branch -M main
+git status
+git add Assets Packages ProjectSettings .gitignore README.md
+git status
+git diff --staged --stat
+git commit -m &quot;Initialize Unity project&quot;
+</code></pre>
+<p>프로젝트에 따라 루트의 추가 필수 파일이 있다면 포함한다. <code>git add .</code>를 사용할 수도 있지만, <strong>최초 커밋 때는 반드시 스테이징 파일 목록을 검토</strong>하는 것이 좋다.</p>
+<ol start="6">
+<li>GitHub에서 <code>aster-arena</code> 비공개 빈 저장소를 생성한다.</li>
+<li>원격 저장소를 연결해 Push한다.</li>
+</ol>
+<pre><code class="language-bash">git remote add origin https://github.com/OWNER/aster-arena.git
+git push -u origin main
+</code></pre>
+<ol start="8">
+<li>GitHub 웹에서 <code>Assets/</code>, <code>Packages/</code>, <code>ProjectSettings/</code>가 올바르게 보이는지 확인한다.</li>
+</ol>
+<h2 id="section-8">3.6 기존 Unity 프로젝트를 옮길 때<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h2>
+<p>기존에 UVCS로 관리하던 프로젝트를 Git으로 옮기고 싶다면 원본과 별도 작업 사본을 만들고 <strong>관리 도구 전환을 테스트</strong>한다. 두 시스템을 동일한 작업 폴더에 동시에 연결해 두면 메타데이터 충돌·혼란이 발생할 수 있으므로 계획 없이 섞어 운영하지 않는다.</p>
+<ul>
+<li>기존 UVCS의 태그·브랜치·변경 이력을 얼마나 보존해야 하는지 정한다.</li>
+<li>Unity 버전과 외부 패키지·원본 에셋의 상태를 기록한다.</li>
+<li>새 Git 저장소로 가져온 뒤 복제 테스트를 수행한다.</li>
+<li>기존 UVCS는 전환 승인 전까지 읽기 전용 백업처럼 보존한다.</li>
+<li>전환 날짜, 최종 UVCS 변경 번호, 최초 Git 커밋을 문서에 기록한다.</li>
+</ul>
+<p>두 저장소 사이에 단순 파일 복사만 했다고 과거 변경 이력이 변환되는 것은 아니다. 이력 보존이 중요하면 별도 마이그레이션 계획이 필요하다.</p>
+<h2 id="section-9">3.7 깨끗한 폴더에서 복원 테스트<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<pre><code class="language-bash">cd &quot;C:/Work&quot;
+git clone https://github.com/OWNER/aster-arena.git AsterArena-Clone
+</code></pre>
+<p>Unity Hub에서 <code>Add project from disk</code> 등 해당 버전의 UI를 통해 <code>AsterArena-Clone</code>을 열고, 다음을 확인한다.</p>
+<ul>
+<li>Unity Hub가 요구하는 에디터 버전이 설치되어 있는가?</li>
+<li>Package Manager 오류 없이 패키지가 설치되는가?</li>
+<li>콘솔에서 컴파일 오류가 발생하지 않는가?</li>
+<li>주요 씬에 Missing Script, Missing Material이 생기지 않는가?</li>
+<li>플레이어 이동·카메라·기본 UI가 정상 동작하는가?</li>
+<li>실제 Player 빌드가 가능한가?</li>
+</ul>
+<p><strong>복원 테스트는 원래 개발자의 <code>Library/</code> 캐시에 의존하지 않는다는 증거</strong>다. 이 절차를 통과하지 못하면 GitHub에 파일을 올렸어도 협업 준비가 끝났다고 보기 어렵다.</p>
+<h2 id="section-10">3.8 Unity와 Git의 실무 주의점<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li>Unity Editor에서 파일을 편집하는 도중 다른 브랜치로 전환하지 않는 편이 안전하다. 브랜치 전환 전 저장·종료·상태 확인을 권장한다.</li>
+<li>패키지 설치 후 <code>manifest.json</code>과 lockfile 변화를 확인한다.</li>
+<li>코드를 삭제하거나 이름을 바꾼 뒤 C# 참조와 씬 연결이 깨지지 않는지 확인한다.</li>
+<li>영문·대소문자 파일명 충돌은 운영체제별 차이로 문제를 일으킬 수 있다.</li>
+<li>빌드 산출물을 소스 저장소에 반복 커밋하면 이력이 비대해지므로 Artifact/Releases 등 별도 경로를 사용한다.</li>
+<li>유료 에셋은 라이선스 허용 범위를 확인한다. Private 저장소라도 팀원 간 공유가 계약 위반일 수 있다.</li>
+</ul>
+<h2 id="section-11">3.9 실습과 확인 기준<a class="heading-link" href="#section-11" aria-label="이 단락 링크">#</a></h2>
+<p>기본 3D Unity 프로젝트에 C# 스크립트, 씬, 프리팹, 텍스처를 각각 추가하고 커밋한다. 저장소에 <code>.meta</code>가 함께 존재하는지 확인한 후 완전히 다른 폴더에 복제해 실행한다. 임시로 <code>Library/</code>를 삭제해도 Unity가 다시 생성하는지 확인한다(원본 백업을 확보하고 테스트 사본에서 수행).</p>
+<p><strong>확인할 결과:</strong> GitHub 저장소만으로 프로젝트 복원이 가능하고 어떤 폴더가 소스이며 무엇이 생성 캐시인지 판단한다.</p>
+<p><strong>공식 자료:</strong> <a href="https://docs.unity3d.com/Manual/ExternalVersionControlSystemSupport.html">Unity 외부 버전 관리</a>, <a href="https://github.com/github/gitignore/blob/main/Unity.gitignore">Unity.gitignore</a>, <a href="https://docs.unity3d.com/Manual/ProjectView.html">Unity 프로젝트 구조</a></p>
+</article><nav class="bottom-nav"><a href="../part-a/02-github-basics.html">← 02 GitHub 기본 사용법</a><a href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">3.1 Unity 프로젝트는 일반 소스 저장소와 무엇이 다른가?</a><a class="level3" href="#section-3">핵심 프로젝트 폴더</a><a class="level2" href="#section-4">3.2 .meta 파일과 GUID</a><a class="level2" href="#section-5">3.3 에디터 및 직렬화 설정</a><a class="level2" href="#section-6">3.4 .gitignore를 설정하는 방법</a><a class="level2" href="#section-7">3.5 Unity 프로젝트 최초 업로드: 새 프로젝트</a><a class="level2" href="#section-8">3.6 기존 Unity 프로젝트를 옮길 때</a><a class="level2" href="#section-9">3.7 깨끗한 폴더에서 복원 테스트</a><a class="level2" href="#section-10">3.8 Unity와 Git의 실무 주의점</a><a class="level2" href="#section-11">3.9 실습과 확인 기준</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

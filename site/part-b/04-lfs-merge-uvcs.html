@@ -1,0 +1,211 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class=" active" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">B · Unity 프로젝트 관리 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">04. Unity 에셋 관리와 Git LFS, 충돌, UVCS 비교<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<h2 id="section-2">4.1 게임 에셋은 왜 특별한가?<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>C# 코드는 줄 단위로 비교·병합하기 쉽다. 하지만 FBX, PSD, Blender 원본, 오디오, 많은 텍스처는 바이너리라서 두 사람이 같은 파일을 다르게 수정한 경우 자동 병합하기 어렵다. 용량도 커서 모든 버전을 일반 Git 객체로 저장하면 복제 속도와 저장소 크기에 부담이 생긴다.</p>
+<p>Git LFS(Large File Storage)는 Git 저장소에 작은 <strong>포인터 파일</strong>을 기록하고 실제 큰 파일은 LFS 스토리지에 보관한다. LFS가 있다고 해서 바이너리 병합이 가능해지는 것은 아니다. <strong>용량 처리와 동시 편집 충돌 방지는 서로 다른 문제</strong>다.</p>
+<h2 id="section-3">4.2 Git LFS 도입 판단<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>에셋</th>
+  <th>일반적인 후보</th>
+  <th>검토 이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>.blend</code>, <code>.psd</code>, <code>.fbx</code></td>
+  <td>LFS 추천 후보</td>
+  <td>크고 바이너리·차분 효율 낮음</td>
+</tr>
+<tr>
+  <td><code>.wav</code>, 대용량 <code>.mp4</code></td>
+  <td>LFS 추천 후보</td>
+  <td>미디어가 저장소를 급격히 키울 수 있음</td>
+</tr>
+<tr>
+  <td><code>.png</code>, <code>.tga</code></td>
+  <td>크기·변경 빈도에 따라</td>
+  <td>무조건 LFS로 지정할 필요는 없음</td>
+</tr>
+<tr>
+  <td><code>.unity</code>, <code>.prefab</code></td>
+  <td>보통 텍스트 Git</td>
+  <td>UnityYAMLMerge 활용 가능성</td>
+</tr>
+<tr>
+  <td><code>.cs</code>, <code>.asmdef</code>, <code>.json</code></td>
+  <td>일반 Git</td>
+  <td>텍스트 비교·리뷰에 적합</td>
+</tr>
+<tr>
+  <td><code>Library/</code></td>
+  <td>추적 제외</td>
+  <td>재생성 가능한 캐시</td>
+</tr>
+</tbody>
+</table>
+<p>LFS를 선택하면 <strong>스토리지와 대역폭 사용량</strong>을 지속적으로 관리해야 한다. 소규모 팀도 빌드 서버가 반복적으로 전체 대형 에셋을 내려받으면 비용이 발생할 수 있다. GitHub LFS 요금·한도는 <a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage">공식 안내</a>에서 확인한다.</p>
+<h2 id="section-4">4.3 설치와 추적 설정<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<p>Git LFS는 Git과 별도로 설치해야 하는 도구다. <a href="https://git-lfs.com/">git-lfs.com</a>에서 설치한 뒤:</p>
+<pre><code class="language-bash">git lfs version
+git lfs install
+git lfs track &quot;*.fbx&quot;
+git lfs track &quot;*.psd&quot;
+git lfs track &quot;*.blend&quot;
+git lfs track &quot;*.wav&quot;
+cat .gitattributes
+</code></pre>
+<p>Windows PowerShell에서는 <code>cat</code>이 파일 내용을 보여주는 별칭으로 동작한다. <code>git lfs track</code>을 실행하면 <code>.gitattributes</code> 규칙이 추가된다.</p>
+<pre><code class="language-gitattributes">*.fbx filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+</code></pre>
+<p>이후 <code>.gitattributes</code> 자체도 반드시 버전 관리한다.</p>
+<pre><code class="language-bash">git add .gitattributes Assets/Art
+ git status
+ git lfs ls-files
+</code></pre>
+<p>위 명령에서 들여쓰기된 <code>git</code> 앞의 공백은 의미가 없지만 복사 시 제거해도 된다. <code>git lfs ls-files</code>는 현재 LFS 관리 대상으로 커밋된 파일을 확인하는 데 쓰인다. 추적 규칙을 만든 뒤 새로 추가한 파일에 적용되는 것을 확인한다.</p>
+<p><strong>기존 Git 이력에 이미 들어간 바이너리</strong>를 LFS로 바꾸는 것은 단순 <code>track</code>만으로 완료되지 않는다. 이력 재작성·기존 팀원 클론·Force Push 위험이 얽힐 수 있으므로 <code>git lfs migrate</code> 같은 작업은 별도 백업·합의 후 실습한다.</p>
+<h2 id="section-5">4.4 LFS 포인터와 Clone 검증<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<p>GitHub 웹에서 일부 LFS 파일은 내용이 아닌 포인터나 요약으로 보인다. 포인터에는 파일의 식별자와 크기가 들어 있고, 실제 파일은 LFS가 다운로드한다.</p>
+<pre><code class="language-bash">git lfs ls-files
+git lfs fetch
+git lfs checkout
+</code></pre>
+<p>대부분은 적절히 설치한 환경에서 <code>git clone</code>/<code>git pull</code>로 파일을 함께 받는다. Clone한 Unity 프로젝트에서 텍스처·모델이 깨지면 해당 파일이 실제 바이너리인지, LFS 포인터만 있는 상태인지 확인한다. <code>GIT_LFS_SKIP_SMUDGE</code> 설정 등으로 자동 다운로드가 생략된 경우도 있다.</p>
+<h2 id="section-6">4.5 파일 잠금의 의미와 한계<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<p><code>git lfs lock</code>은 <strong>한 번에 한 사람이 편집하도록 협의</strong>하는 보조 수단이다.</p>
+<pre><code class="language-bash">git lfs lock Assets/Art/Boss.blend
+git lfs locks
+git lfs unlock Assets/Art/Boss.blend
+</code></pre>
+<p>잠금이 제대로 작동하려면 사용 중인 Git 호스팅·클라이언트 지원과 조직의 운영 정책을 확인해야 한다. 모든 파일에 자동으로 강제되거나 오프라인 작업까지 완전 차단하는 것은 아니며, 잠금만으로 팀의 협업 갈등이 사라지지 않는다. 같은 씬을 반복해서 편집해야 한다면 씬 분리·프리팹 모듈화가 더 근본적인 해결책일 수 있다.</p>
+<h2 id="section-7">4.6 Unity 씬·프리팹의 텍스트 병합<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<p>Unity의 씬과 프리팹은 Force Text 설정에서 YAML 형식으로 직렬화될 수 있다. 텍스트이므로 Git이 변경을 비교할 수는 있지만, Unity 객체 ID와 참조가 복잡해 문법만 맞춰 병합하면 논리적인 오류가 생길 수 있다. Unity가 제공하는 <strong>UnityYAMLMerge/Smart Merge</strong>는 이 데이터를 인식하는 병합 도구다.</p>
+<blockquote>
+<p>예시: 같은 씬에서 A가 조명을 이동하고 B가 적 오브젝트를 삭제했다면, Git이 충돌을 해결하더라도 참조가 끊긴 오브젝트가 없는지 Unity에서 반드시 확인한다.</p>
+</blockquote>
+<h3 id="section-8">UnityYAMLMerge를 Git에 연결하는 개념<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h3>
+<p>Unity Editor 설치 폴더에 있는 실제 UnityYAMLMerge 경로를 찾는다. 버전/OS에 따라 경로가 달라지므로 하드코딩된 오래된 경로를 사용하지 않는다.</p>
+<pre><code class="language-ini"># 예시: 사용자별 .gitconfig 설정의 일부
+[merge]
+    tool = unityyamlmerge
+[mergetool &quot;unityyamlmerge&quot;]
+    trustExitCode = false
+    cmd = 'PATH_TO_UNITYYAMLMERGE' merge -p &quot;$BASE&quot; &quot;$REMOTE&quot; &quot;$LOCAL&quot; &quot;$MERGED&quot;
+</code></pre>
+<p><code>PATH_TO_UNITYYAMLMERGE</code>는 <strong>실제 실행 파일 경로로 교체</strong>하고 사용하는 셸/플랫폼의 경로 따옴표를 맞춘다. 위 예시는 Unity 문서에서 소개하는 외부 병합 도구 연결 개념으로, 그 자체가 모든 Git 충돌을 자동 해결하는 완성 설정은 아니다. <code>git mergetool</code>과 파일 속성 등을 팀 환경에서 테스트해야 한다.</p>
+<h3 id="section-9">충돌 처리 절차<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h3>
+<ol>
+<li>먼저 충돌 파일과 <code>git status</code>를 캡처·기록한다.</li>
+<li>변경 당사자와 <strong>양쪽 수정 의도</strong>를 확인한다.</li>
+<li>대상이 C# 텍스트인지, Unity YAML인지, 바이너리인지 분류한다.</li>
+<li>YAML은 적절한 도구로 병합하고, 바이너리는 보통 한 버전을 선택해 별도 수작업으로 재적용한다.</li>
+<li>Unity에서 씬을 열어 Missing 참조·컴포넌트·실제 동작을 검증한다.</li>
+<li>결정 사항을 PR에 기록하고 다시 테스트한다.</li>
+</ol>
+<h2 id="section-10">4.7 충돌을 줄이는 Unity 설계<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li>큰 씬 하나에 모든 시스템을 놓기보다 <code>Bootstrap</code>, <code>UI</code>, <code>Level</code>, <code>Gameplay</code> 등 역할을 분리한다.</li>
+<li>재사용 가능한 장면 요소를 Prefab으로 구성해 담당 영역을 분리한다.</li>
+<li>한 장면을 동시에 변경해야 하는 작업은 Discord/Issue에서 사전 협의한다.</li>
+<li>프로그램 코드와 수치 데이터를 적절히 나누어 단순 밸런스 수정이 큰 씬 변경으로 이어지지 않게 한다.</li>
+<li>동일 에셋의 잠금·소유권·수정 우선순위를 정한다.</li>
+<li>실험용 변경은 별도 브랜치나 복사본에서 진행하고, 정식 파일을 덮어쓰지 않는다.</li>
+</ul>
+<h2 id="section-11">4.8 UVCS(Unity Version Control)와 Git 비교<a class="heading-link" href="#section-11" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>비교 기준</th>
+  <th>UVCS</th>
+  <th>Git + GitHub</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>익숙한 핵심 조작</td>
+  <td>Checkin, Workspace</td>
+  <td>Commit, Push, Pull</td>
+</tr>
+<tr>
+  <td>이력 구조</td>
+  <td>중앙 서비스/워크스페이스 중심 사용 흐름</td>
+  <td>로컬 커밋 이력과 원격 동기화 구분</td>
+</tr>
+<tr>
+  <td>게임 에셋 협업</td>
+  <td>잠금·아티스트 중심 작업 흐름이 강점</td>
+  <td>LFS·잠금·씬 분리 등의 운영 설계 필요</td>
+</tr>
+<tr>
+  <td>코드 협업</td>
+  <td>UVCS의 브랜치·리뷰 수단</td>
+  <td>GitHub PR·Rulesets·Checks</td>
+</tr>
+<tr>
+  <td>자동화와 연계</td>
+  <td>별도 도구·연동 구성</td>
+  <td>GitHub Actions 통합 편의성</td>
+</tr>
+<tr>
+  <td>팀의 학습 비용</td>
+  <td>기존 UVCS 경험이 있으면 낮음</td>
+  <td>Git·LFS·PR 학습 필요</td>
+</tr>
+</tbody>
+</table>
+<p>둘은 모두 실제 버전 관리 시스템이고 어느 쪽이 무조건 우수하다고 단정할 수 없다. <strong>GitHub Actions를 쓰고 싶다</strong>는 이유만으로 UVCS를 즉시 폐기할 필요는 없다. 다만 GitHub 중심으로 협업하려면 중복 커밋·수동 동기화 부담을 줄이도록 <strong>주 저장소를 하나 정하는 방향</strong>을 검토해야 한다.</p>
+<h3 id="section-12">UVCS에서 GitHub로 전환하려면<a class="heading-link" href="#section-12" aria-label="이 단락 링크">#</a></h3>
+<ol>
+<li>전환 목적(협업·빌드·라이선스 비용·파일 잠금)을 기록한다.</li>
+<li>대표 프로젝트로 Git LFS 저장소를 시험한다.</li>
+<li>에셋 충돌·대용량 파일·복제 시간·팀원 숙련도를 측정한다.</li>
+<li>외부 에셋 라이선스와 저장 공간 비용을 검토한다.</li>
+<li>전환 시점과 원본 백업, 이력 보존, 복귀 방법을 정한다.</li>
+<li>시험 결과를 근거로 최종 결정한다.</li>
+</ol>
+<h2 id="section-13">4.9 실습과 확인 기준<a class="heading-link" href="#section-13" aria-label="이 단락 링크">#</a></h2>
+<p>FBX·PSD 같은 대용량 에셋 후보 파일을 LFS로 관리하는 작은 시험 저장소를 만든다. 다른 폴더에서 Clone하고 실제 원본 데이터가 다운로드되는지 확인한다. 이어 <strong>복사해 둔 Unity 테스트 프로젝트</strong>에서 같은 Prefab의 서로 다른 속성을 두 브랜치에서 바꾼 뒤 의도적으로 충돌을 만들어 해결하고, Unity에서 정상 표시되는지 확인한다.</p>
+<p><strong>확인할 결과:</strong> Git LFS의 목적과 한계를 구별하고, 게임 에셋 충돌을 자동으로 해결할 수 있는 경우와 사람의 조정이 필요한 경우를 판단할 수 있다.</p>
+<p><strong>공식 자료:</strong> <a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage">Git LFS 소개</a>, <a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage">Git LFS 설정</a>, <a href="https://docs.unity3d.com/Manual/SmartMerge.html">Unity Smart Merge</a></p>
+<hr />
+<h2 id="section-14">4.9 확장: Unity 파일 충돌의 해결 순서<a class="heading-link" href="#section-14" aria-label="이 단락 링크">#</a></h2>
+<p><code>.unity</code>, <code>.prefab</code>, <code>.asset</code>, <code>.meta</code>의 변경은 텍스트로 보이더라도 Unity 에셋 참조·GUID와 밀접하게 관련된다. Git에서 병합 성공으로 표시되더라도 Unity에서 정상적으로 열리지 않으면 <strong>실질적인 통합 성공이 아니다</strong>.</p>
+<p>충돌이 나면 다음처럼 접근한다.</p>
+<ol>
+<li><code>git status</code>로 충돌 파일을 확인한다.</li>
+<li>해당 파일의 소유자 또는 작업자를 찾고 변경 의도를 확인한다.</li>
+<li>수정 파일을 백업하거나 안전한 브랜치를 확보한다.</li>
+<li>텍스트/YAML 파일이라면 충돌 구간을 비교한다. UnityYAMLMerge를 이미 구성했다면 설정과 결과를 검증한다.</li>
+<li>바이너리 파일은 텍스트 방식으로 임의 병합하려 하지 않는다. 한 버전을 선택하고 변경을 재적용하거나, 에셋 잠금·작업 조율로 해결한다.</li>
+<li>충돌 표시가 제거되었다고 끝내지 말고 Unity에서 해당 씬과 Prefab 참조를 확인한다.</li>
+<li>플레이 모드 및 필요한 빌드를 실행한다.</li>
+<li>재발이 반복되면 폴더 분할, 씬 분리, Prefab 작업 단위, 잠금 정책을 재설계한다.</li>
+</ol>
+<p><strong>중요:</strong> <code>git checkout --ours</code>나 <code>--theirs</code>로 충돌 파일을 선택하면 <strong>다른 쪽 변경 사항을 버릴 수 있다</strong>. 명령을 외워서 사용하는 대신 변경 범위와 의도를 먼저 확인하자.</p>
+<h2 id="section-15">4.10 Git LFS가 만능은 아닌 이유<a class="heading-link" href="#section-15" aria-label="이 단락 링크">#</a></h2>
+<p>Git LFS는 큰 파일을 저장하고 전송하는 방식을 바꾸는 도구야. <strong>두 사람이 동시에 같은 바이너리 파일을 수정했을 때 내용을 자동으로 병합해 주는 도구는 아니다.</strong> 잠금 기능을 검토할 수 있지만 팀원이 잠금 규칙을 실제로 지켜야 한다.</p>
+<p>LFS 도입 전에 다음을 판단한다.</p>
+<ul>
+<li>저장소가 커지는 원인이 어디에 있는가? PSD/FBX/대형 텍스처인가, 아니면 잘못 포함된 <code>Library</code> 캐시인가?</li>
+<li>LFS로 추적할 파일 종류를 <code>.gitattributes</code>에 일관되게 기록할 수 있는가?</li>
+<li>GitHub의 저장 공간 및 전송량이 팀 예산에 맞는가?</li>
+<li>기존 Git 이력을 재작성해야 하는 경우 팀원에게 충분히 공지할 수 있는가?</li>
+</ul>
+<p>실습으로 단일 FBX 파일의 변경과 충돌을 비교해 보면 '대용량 관리'와 '동시 편집 관리'가 별개의 문제라는 것을 알 수 있다.</p>
+<h2 id="section-16">4.11 UVCS에서 GitHub 전환을 검증하는 실험<a class="heading-link" href="#section-16" aria-label="이 단락 링크">#</a></h2>
+<p>기존 UVCS에서 바로 모든 프로젝트를 옮길 필요는 없다. 별도 테스트 Unity 프로젝트를 만들고 다음을 검증하자.</p>
+<ul>
+<li>동일한 씬과 프리팹을 두 명이 수정했을 때 Git이 얼마나 쉽게 충돌을 처리하는가?</li>
+<li>UVCS에서 익숙했던 체크인·브랜치·그래프 확인이 GitHub Desktop 또는 Git UI에서 가능한가?</li>
+<li>팀원 모두가 Git LFS를 설정하고 새 PC에서 프로젝트를 복원할 수 있는가?</li>
+<li>GitHub PR과 Actions의 장점이 추가 학습 비용을 상쇄할 수 있는가?</li>
+</ul>
+<p>실험을 마친 뒤 하나의 프로젝트에서는 <strong>Git/ GitHub 또는 UVCS 중 주 버전 관리 시스템을 분명하게 정하는 것</strong>을 추천한다. 양쪽에서 각각 코드 수정을 허용하면 이력 불일치와 수동 동기화 부담이 발생할 수 있다.</p>
+</article><nav class="bottom-nav"><a href="../part-b/03-unity-repository.html">← 03 Unity 저장소 구성</a><a href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">4.1 게임 에셋은 왜 특별한가?</a><a class="level2" href="#section-3">4.2 Git LFS 도입 판단</a><a class="level2" href="#section-4">4.3 설치와 추적 설정</a><a class="level2" href="#section-5">4.4 LFS 포인터와 Clone 검증</a><a class="level2" href="#section-6">4.5 파일 잠금의 의미와 한계</a><a class="level2" href="#section-7">4.6 Unity 씬·프리팹의 텍스트 병합</a><a class="level3" href="#section-8">UnityYAMLMerge를 Git에 연결하는 개념</a><a class="level3" href="#section-9">충돌 처리 절차</a><a class="level2" href="#section-10">4.7 충돌을 줄이는 Unity 설계</a><a class="level2" href="#section-11">4.8 UVCS(Unity Version Control)와 Git 비교</a><a class="level3" href="#section-12">UVCS에서 GitHub로 전환하려면</a><a class="level2" href="#section-13">4.9 실습과 확인 기준</a><a class="level2" href="#section-14">4.9 확장: Unity 파일 충돌의 해결 순서</a><a class="level2" href="#section-15">4.10 Git LFS가 만능은 아닌 이유</a><a class="level2" href="#section-16">4.11 UVCS에서 GitHub 전환을 검증하는 실험</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

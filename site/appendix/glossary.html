@@ -1,0 +1,241 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class=" active" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">참고 자료 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">부록 B. 핵심 용어 사전<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<table>
+<thead>
+<tr>
+  <th>용어</th>
+  <th>뜻</th>
+  <th>혼동하기 쉬운 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Git</td>
+  <td>로컬 중심 분산 버전 관리 프로그램</td>
+  <td>GitHub 자체</td>
+</tr>
+<tr>
+  <td>GitHub</td>
+  <td>저장소 호스팅·협업 서비스</td>
+  <td>Git 명령줄 프로그램</td>
+</tr>
+<tr>
+  <td>Repository</td>
+  <td>프로젝트 파일과 변경 이력의 단위</td>
+  <td>Project 작업 보드</td>
+</tr>
+<tr>
+  <td>Local Repository</td>
+  <td>작업 컴퓨터의 Git 저장소</td>
+  <td>GitHub 원격 저장소</td>
+</tr>
+<tr>
+  <td>Remote Repository</td>
+  <td>GitHub 등에 위치한 저장소</td>
+  <td>로컬 작업 폴더</td>
+</tr>
+<tr>
+  <td>Working Directory</td>
+  <td>수정 중인 프로젝트 파일</td>
+  <td>스테이징된 변경</td>
+</tr>
+<tr>
+  <td>Staging Area</td>
+  <td>다음 커밋에 포함할 변경 목록</td>
+  <td>이미 원격 업로드한 상태</td>
+</tr>
+<tr>
+  <td>Commit</td>
+  <td>이력을 기록하는 단위</td>
+  <td>Push</td>
+</tr>
+<tr>
+  <td>Push</td>
+  <td>로컬 이력을 원격으로 보냄</td>
+  <td>Commit</td>
+</tr>
+<tr>
+  <td>Fetch</td>
+  <td>원격 이력을 가져와 갱신</td>
+  <td>작업 브랜치에 병합하는 Pull</td>
+</tr>
+<tr>
+  <td>Pull</td>
+  <td>Fetch 후 로컬과 통합</td>
+  <td>단순 조회</td>
+</tr>
+<tr>
+  <td>Clone</td>
+  <td>원격 저장소 복제</td>
+  <td>ZIP 단발 다운로드</td>
+</tr>
+<tr>
+  <td>Branch</td>
+  <td>작업 이력을 나누는 참조</td>
+  <td>게임 개발 릴리스 버전</td>
+</tr>
+<tr>
+  <td>Merge</td>
+  <td>브랜치 이력 통합</td>
+  <td>파일 복사만 하는 작업</td>
+</tr>
+<tr>
+  <td>Rebase</td>
+  <td>커밋을 다른 기점에 재적용</td>
+  <td>안전한 무조건 되돌리기</td>
+</tr>
+<tr>
+  <td>HEAD</td>
+  <td>현재 Git 작업 위치의 참조</td>
+  <td>기본 브랜치 이름</td>
+</tr>
+<tr>
+  <td>Pull Request</td>
+  <td>변경 검토·통합 요청</td>
+  <td><code>git pull</code> 명령</td>
+</tr>
+<tr>
+  <td>Code Review</td>
+  <td>변경의 타당성과 품질 확인</td>
+  <td>자동 테스트 통과</td>
+</tr>
+<tr>
+  <td>Issue</td>
+  <td>기능·작업·버그의 추적 항목</td>
+  <td>Projects의 전체 계획</td>
+</tr>
+<tr>
+  <td>Sub-issue</td>
+  <td>상위 Issue에 속하는 하위 작업</td>
+  <td>체크박스 문장</td>
+</tr>
+<tr>
+  <td>Milestone</td>
+  <td>목표 결과물이나 주요 시점의 묶음</td>
+  <td>시간 단위 Iteration</td>
+</tr>
+<tr>
+  <td>Iteration</td>
+  <td>반복 개발 작업 기간</td>
+  <td>특정 출시 버전</td>
+</tr>
+<tr>
+  <td>GitHub Projects</td>
+  <td>이슈/PR을 관리하는 웹 기능</td>
+  <td>데스크톱 설치 프로그램</td>
+</tr>
+<tr>
+  <td>GitHub Actions</td>
+  <td>자동화 실행 서비스</td>
+  <td>자동 빌드를 보장하는 프로그램</td>
+</tr>
+<tr>
+  <td>Workflow</td>
+  <td>Actions YAML 자동화 정의</td>
+  <td>단일 Step</td>
+</tr>
+<tr>
+  <td>Job</td>
+  <td>Runner에서 실행되는 작업 묶음</td>
+  <td>독립 파일 영구 저장소</td>
+</tr>
+<tr>
+  <td>Step</td>
+  <td>Job에서 수행하는 단일 동작</td>
+  <td>전체 Workflow</td>
+</tr>
+<tr>
+  <td>Runner</td>
+  <td>Actions 작업을 실행하는 컴퓨터</td>
+  <td>GitHub 저장소</td>
+</tr>
+<tr>
+  <td>Artifact</td>
+  <td>실행 결과로 저장한 파일 묶음</td>
+  <td>Cache</td>
+</tr>
+<tr>
+  <td>Cache</td>
+  <td>실행 사이 재사용하는 임시 데이터</td>
+  <td>영구 백업</td>
+</tr>
+<tr>
+  <td>Git LFS</td>
+  <td>대용량 파일을 별도 저장하도록 돕는 Git 확장</td>
+  <td>바이너리 자동 병합 도구</td>
+</tr>
+<tr>
+  <td><code>.gitignore</code></td>
+  <td>기본적으로 추적하지 않을 파일 패턴</td>
+  <td>이미 추적 중인 파일 삭제 기능</td>
+</tr>
+<tr>
+  <td><code>.gitattributes</code></td>
+  <td>파일 처리·LFS·병합 규칙 설정</td>
+  <td><code>.gitignore</code></td>
+</tr>
+<tr>
+  <td><code>.meta</code> / GUID</td>
+  <td>Unity 에셋의 고유 식별 및 임포트 정보</td>
+  <td>불필요한 캐시</td>
+</tr>
+<tr>
+  <td>UnityYAMLMerge</td>
+  <td>Unity 직렬화 파일용 병합 도구</td>
+  <td>모든 충돌의 자동 해결책</td>
+</tr>
+<tr>
+  <td>Edit Mode Test</td>
+  <td>Editor 중심 테스트</td>
+  <td>실제 전체 게임 체험</td>
+</tr>
+<tr>
+  <td>Play Mode Test</td>
+  <td>게임 프레임 기반 테스트</td>
+  <td>사용자 플레이테스트</td>
+</tr>
+<tr>
+  <td>CI</td>
+  <td>지속적 통합과 자동 검사 실천</td>
+  <td>Actions 제품명 자체</td>
+</tr>
+<tr>
+  <td>CD</td>
+  <td>지속적 전달/배포 실천</td>
+  <td>무조건 자동 공개 출시</td>
+</tr>
+<tr>
+  <td>Git Tag</td>
+  <td>특정 커밋을 나타내는 참조</td>
+  <td>GitHub Release 설명문</td>
+</tr>
+<tr>
+  <td>Release</td>
+  <td>버전별 배포 파일·정보 기록</td>
+  <td>커밋 전체</td>
+</tr>
+<tr>
+  <td>ADR</td>
+  <td>아키텍처 결정과 근거 기록</td>
+  <td>상세 코드 문서 전체</td>
+</tr>
+<tr>
+  <td>GitHub App</td>
+  <td>권한을 제한해 GitHub API에 접근하는 앱 인증 모델</td>
+  <td>사용자의 전체 PAT</td>
+</tr>
+<tr>
+  <td>Webhook</td>
+  <td>이벤트 발생 시 외부에 HTTP 요청 전송</td>
+  <td>저장소 간 자동 동기화</td>
+</tr>
+<tr>
+  <td><code>AGENTS.md</code></td>
+  <td>일부 AI 도구가 읽는 프로젝트 지침 문서</td>
+  <td>모든 AI가 강제로 준수하는 표준</td>
+</tr>
+</tbody>
+</table>
+</article><nav class="bottom-nav"><a href="../appendix/troubleshooting.html">← 문제 해결</a><a href="../appendix/templates.html">재사용 템플릿 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

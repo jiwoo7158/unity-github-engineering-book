@@ -1,0 +1,183 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class=" active" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">A · Git과 GitHub 기초 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">01. Git의 기본 원리<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<h2 id="section-2">1.1 Git은 무엇을 관리하는가?<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>Git은 파일의 변화를 <strong>커밋(commit)</strong>이라는 단위로 기록하는 분산 버전 관리 프로그램이다. GitHub 계정이 없어도 로컬에서 Git을 쓸 수 있다. 반대로 GitHub 웹 페이지에 저장소가 있다는 사실만으로 로컬 컴퓨터가 자동으로 동기화되지는 않는다. <code>git push</code>나 Desktop의 <strong>Push origin</strong>처럼 변경을 보내는 동작이 필요하다.</p>
+<p>UVCS에서 체크인한 경험이 있다면 ‘변경 집합을 기록한다’는 감각은 비슷하다. 다만 Git은 <strong>로컬 저장소에 먼저 커밋</strong>하고, 그 이력을 원격 저장소로 <code>push</code>하는 작업이 분리된다.</p>
+<p><img class="book-diagram" src="../assets/diagrams/git-changes.svg" alt="Git 작업 폴더부터 원격 저장소까지의 흐름" /></p>
+<ul>
+<li><strong>Working Directory</strong>: 지금 편집하는 파일이 있는 작업 폴더. Unity Editor가 <code>Assets</code>를 수정하는 영역이다.</li>
+<li><strong>Staging Area/Index</strong>: 다음 커밋에 포함할 변경을 선택해 놓는 영역. <code>git add</code>는 업로드가 아니라 이 준비 작업이다.</li>
+<li><strong>Local Repository</strong>: <code>.git</code> 폴더에 기록된 커밋 이력. 인터넷 없이도 커밋 가능하다.</li>
+<li><strong>Remote Repository</strong>: GitHub 같은 서버에 놓인 저장소. <code>origin</code>은 보통 기본 원격 저장소의 별칭이다.</li>
+<li><strong>Commit</strong>: 특정 시점의 파일 상태와 부모 커밋, 작성자 등의 정보를 갖는 불변에 가까운 이력 객체.</li>
+<li><strong>HEAD</strong>: 현재 체크아웃해 작업하는 커밋·브랜치를 가리키는 참조.</li>
+</ul>
+<blockquote>
+<p><strong>커밋은 백업과 같지 않다</strong>
+로컬 커밋만 있으면 디스크 손실 시 함께 사라질 수 있다. 원격 푸시와 저장소 별도 백업을 조합해야 한다. <code>git push</code>만으로도 모든 종류의 손실·삭제를 예방하는 것은 아니다.</p>
+</blockquote>
+<h2 id="section-3">1.2 시작 준비와 사용자 설정<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<p>Windows에서 <a href="https://git-scm.com/downloads">Git 공식 배포</a>를 설치하고 PowerShell, Git Bash 또는 VS Code 터미널을 열어 확인한다.</p>
+<pre><code class="language-bash">git --version
+git config --global user.name &quot;Your Display Name&quot;
+git config --global user.email &quot;you@example.com&quot;
+git config --global --list
+</code></pre>
+<p><code>user.name</code>과 <code>user.email</code>은 커밋 작성자 정보다. GitHub 웹 인증과 다르다. 이메일 공개가 부담되면 GitHub의 <code>noreply</code> 주소를 사용할 수 있다. 팀 전체에서 개별 사용자 계정을 사용하는 것이 추적성 면에서 좋다.</p>
+<h3 id="section-4">처음 실습: 작은 C# 파일 이력 만들기<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h3>
+<pre><code class="language-bash">mkdir git-practice
+cd git-practice
+git init
+echo &quot;public class Health {}&quot; &gt; Health.cs
+git status
+git add Health.cs
+git commit -m &quot;Add health component skeleton&quot;
+git log --oneline --decorate -5
+</code></pre>
+<p>Git 기본 브랜치 이름은 환경 설정에 따라 다를 수 있다. 통일이 필요하면 <code>git branch -M main</code>으로 이름을 바꾼다. <code>git status</code>는 작업 전후에 자주 보는 습관을 들이자.</p>
+<h2 id="section-5">1.3 핵심 명령과 정확한 의미<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>명령</th>
+  <th>의미</th>
+  <th>Unity 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>git status</code></td>
+  <td>수정·추가·충돌·스테이징 확인</td>
+  <td><code>.meta</code> 누락 검사</td>
+</tr>
+<tr>
+  <td><code>git diff</code></td>
+  <td>아직 스테이징하지 않은 변경 비교</td>
+  <td>C# 코드 수정 검토</td>
+</tr>
+<tr>
+  <td><code>git diff --staged</code></td>
+  <td>커밋 예정 변경 비교</td>
+  <td>예상치 못한 씬 포함 여부 검사</td>
+</tr>
+<tr>
+  <td><code>git add Assets/Scripts/Player.cs</code></td>
+  <td>특정 경로를 스테이징</td>
+  <td>기능과 무관한 장면 수정 제외</td>
+</tr>
+<tr>
+  <td><code>git commit -m &quot;...&quot;</code></td>
+  <td>로컬 변경 집합 기록</td>
+  <td>구현 단위 이력 생성</td>
+</tr>
+<tr>
+  <td><code>git log --oneline --graph --all</code></td>
+  <td>이력 확인</td>
+  <td>브랜치가 어디서 갈라졌는지 이해</td>
+</tr>
+<tr>
+  <td><code>git clone URL</code></td>
+  <td>원격 저장소 복제</td>
+  <td>새 팀원 초기 설정</td>
+</tr>
+<tr>
+  <td><code>git fetch origin</code></td>
+  <td>원격 이력만 가져옴</td>
+  <td>병합 전 변경 확인</td>
+</tr>
+<tr>
+  <td><code>git pull</code></td>
+  <td>가져온 내용을 현재 작업에 통합</td>
+  <td>다른 팀원의 최신 코드 반영</td>
+</tr>
+<tr>
+  <td><code>git push -u origin main</code></td>
+  <td>로컬 브랜치를 원격에 게시</td>
+  <td>첫 업로드</td>
+</tr>
+<tr>
+  <td><code>git switch -c feature/dodge</code></td>
+  <td>새 브랜치 생성·전환</td>
+  <td>회피 기능 분리</td>
+</tr>
+<tr>
+  <td><code>git merge feature/dodge</code></td>
+  <td>다른 브랜치 이력을 통합</td>
+  <td>기능 통합</td>
+</tr>
+</tbody>
+</table>
+<p><code>fetch</code>는 비교적 안전한 조회 중심 작업이며, <code>pull</code>은 통합까지 수행한다. 로컬에 커밋되지 않은 수정이 있을 때는 먼저 <code>status</code>를 확인하고, 의도적으로 커밋하거나 임시 보관한 뒤 가져오자.</p>
+<h2 id="section-6">1.4 브랜치와 병합의 사고방식<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<p>브랜치는 무거운 복제 폴더가 아니라 특정 커밋을 가리키는 가벼운 포인터다. <code>main</code>에서 기능 브랜치를 만들면 두 브랜치가 같은 출발점을 공유하다 각자 커밋이 생기면서 갈라진다.</p>
+<pre><code class="language-bash">git switch main
+git switch -c feature/player-dodge
+# PlayerDodge.cs를 수정한 뒤
+git add Assets/Scripts/PlayerDodge.cs
+git commit -m &quot;Implement dodge state transitions&quot;
+git switch main
+git merge feature/player-dodge
+</code></pre>
+<p>실제 팀 작업에서는 <code>main</code>에 직접 <code>merge</code>하기보다는 GitHub Pull Request를 통해 리뷰한 후 병합하는 방식을 권장한다(05장).</p>
+<h3 id="section-7">충돌이 발생하면<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h3>
+<p>두 브랜치에서 같은 텍스트의 동일한 부분을 바꾸면 Git이 자동으로 선택하지 못할 수 있다. <code>git status</code>로 충돌 파일을 확인한 뒤, 텍스트의 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 표시를 읽고 의도한 최종 내용으로 정리한 다음 <code>git add</code>하여 병합을 완료한다. <strong>Unity 씬·프리팹 파일은 텍스트처럼 보이더라도 구조화된 직렬화 데이터이므로 표시만 지우는 식의 해결은 위험하다.</strong> 04장에서 별도로 다룬다.</p>
+<h2 id="section-8">1.5 실수 복구: 파일·커밋·브랜치<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h2>
+<table>
+<thead>
+<tr>
+  <th>상황</th>
+  <th>우선 사용할 방법</th>
+  <th>주의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>파일 수정만 취소</td>
+  <td><code>git restore -- 파일경로</code></td>
+  <td>저장되지 않은 수정이 사라짐</td>
+</tr>
+<tr>
+  <td>스테이징만 취소</td>
+  <td><code>git restore --staged -- 파일경로</code></td>
+  <td>작업 파일 내용은 유지</td>
+</tr>
+<tr>
+  <td>안전한 되돌림 이력</td>
+  <td><code>git revert 커밋해시</code></td>
+  <td>이전 변경을 취소하는 새 커밋 생성</td>
+</tr>
+<tr>
+  <td>임시 작업 보관</td>
+  <td><code>git stash push -u -m &quot;메시지&quot;</code></td>
+  <td>적용 후 충돌 발생 가능</td>
+</tr>
+<tr>
+  <td>임시 작업 복원</td>
+  <td><code>git stash list</code>, <code>git stash pop</code></td>
+  <td><code>pop</code>은 성공 시 stash 제거</td>
+</tr>
+<tr>
+  <td>과거 이력 탐색</td>
+  <td><code>git reflog</code></td>
+  <td>로컬 기록의 보존에는 기간 제한 존재</td>
+</tr>
+</tbody>
+</table>
+<p><code>git reset --hard</code>, <code>git clean -fd</code>, <code>push --force</code>는 데이터 손실이나 팀원의 이력 훼손을 일으킬 수 있다. 단순히 '되돌리기'라는 설명만 보고 실행하지 말고, <strong>어느 영역(작업 폴더·스테이징·커밋·원격)이 바뀌는지</strong> 이해한 뒤 사용하자. 공유된 <code>main</code>의 잘못된 변경은 대체로 <code>revert</code>가 낫다.</p>
+<h2 id="section-9">1.6 GitHub Desktop과 터미널을 병행하는 법<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<p>GitHub Desktop의 <code>Changes → Commit to ... → Push origin</code>은 각각 변경 선택, 로컬 커밋, 원격 업로드에 해당한다. <code>Fetch origin</code>은 원격 이력을 확인하고 <code>Pull origin</code>은 변경을 로컬에 가져오는 역할을 한다. Desktop은 입문에 편하지만 세밀한 복구, LFS 조사, CI 관련 작업에는 CLI가 유용하다.</p>
+<p>터미널과 Desktop은 같은 <code>.git</code> 저장소를 조작하므로 <strong>서로 독립된 변경 이력이 생기는 것이 아니다</strong>. 어느 화면에서 작업하든 현재 브랜치와 미커밋 변경을 확인하자.</p>
+<h2 id="section-10">1.7 작은 실습: 변경과 복구<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li><code>Health.cs</code>에 <code>MaxHealth</code> 필드를 추가하고 <code>git diff</code>를 살펴본다.</li>
+<li><code>git add</code>와 <code>git commit</code>으로 기능 이력을 기록한다.</li>
+<li>다른 브랜치에서 값을 바꿔 커밋한다.</li>
+<li><code>main</code>에서 통합하고 두 이력을 <code>git log --graph --oneline --all</code>로 확인한다.</li>
+<li>안전한 실습용 파일을 한 번 수정하고 <code>git restore</code>로 되돌려 본다.</li>
+<li>커밋한 변경을 <code>git revert</code>로 되돌려 <strong>새 커밋이 생기는 것</strong>을 확인한다.</li>
+</ol>
+<p><strong>확인할 결과:</strong> 어떤 변경이 로컬에만 있고 어떤 변경이 원격으로 전송되었는지, 실수를 되돌릴 때 데이터가 어디서 사라지는지 설명할 수 있어야 한다.</p>
+<p><strong>공식 자료:</strong> <a href="https://git-scm.com/book/en/v2">Git Book</a>, <a href="https://git-scm.com/docs">Git 참조</a>, <a href="https://docs.github.com/en/get-started">GitHub 시작하기</a></p>
+</article><nav class="bottom-nav"><a href="../index.html">← 시작하기</a><a href="../part-a/02-github-basics.html">02 GitHub 기본 사용법 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">1.1 Git은 무엇을 관리하는가?</a><a class="level2" href="#section-3">1.2 시작 준비와 사용자 설정</a><a class="level3" href="#section-4">처음 실습: 작은 C# 파일 이력 만들기</a><a class="level2" href="#section-5">1.3 핵심 명령과 정확한 의미</a><a class="level2" href="#section-6">1.4 브랜치와 병합의 사고방식</a><a class="level3" href="#section-7">충돌이 발생하면</a><a class="level2" href="#section-8">1.5 실수 복구: 파일·커밋·브랜치</a><a class="level2" href="#section-9">1.6 GitHub Desktop과 터미널을 병행하는 법</a><a class="level2" href="#section-10">1.7 작은 실습: 변경과 복구</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

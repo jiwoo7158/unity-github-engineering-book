@@ -1,0 +1,81 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class=" active" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">참고 자료 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">부록 D. 공식 자료와 검증 범위<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<p>이 책은 <strong>2026-10-16 기준</strong> 공개된 GitHub·Unity·Git·MkDocs 관련 공식 문서의 기능 분류와 사용 방식을 참고하여 작성했다. 예시는 이 책을 만들기 위해 독립적으로 작성한 학습용 설명이며, 공식 문서의 페이지 전체를 복제하지 않는다.</p>
+<h2 id="section-2">Git 기본과 GitHub 저장소<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><a href="https://git-scm.com/docs">Git 공식 문서</a></li>
+<li><a href="https://git-scm.com/book/en/v2">Pro Git Book</a></li>
+<li><a href="https://docs.github.com/en/get-started">GitHub 시작하기</a></li>
+<li><a href="https://docs.github.com/en/repositories">GitHub Repositories</a></li>
+<li><a href="https://docs.github.com/en/desktop">GitHub Desktop</a></li>
+<li><a href="https://github.com/github/gitignore/blob/main/Unity.gitignore">GitHub 공식 Unity.gitignore</a></li>
+</ul>
+<h2 id="section-3">Unity 프로젝트와 에셋<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html">Unity Manual</a></li>
+<li><a href="https://docs.unity3d.com/Manual/SmartMerge.html">Unity Smart Merge</a></li>
+<li><a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage">GitHub Git LFS</a></li>
+<li><a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage">Git LFS 설정</a></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.test-framework@latest">Unity Test Framework</a></li>
+<li><a href="https://docs.unity3d.com/Manual/EditorCommandLineArguments.html">Unity Editor 명령줄 인수</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/BuildPipeline.BuildPlayer.html">Unity BuildPipeline.BuildPlayer</a></li>
+</ul>
+<h2 id="section-4">팀 협업과 프로젝트 관리<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><a href="https://docs.github.com/en/pull-requests">GitHub Pull Requests</a></li>
+<li><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues">GitHub Issues</a></li>
+<li><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/adding-sub-issues">GitHub Issue Sub-issues</a></li>
+<li><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-issue-dependencies">GitHub Issue Dependencies</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects">GitHub Projects</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations">Projects 기본 자동화</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions">Projects를 Actions로 자동화</a></li>
+</ul>
+<h2 id="section-5">GitHub Actions와 배포<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><a href="https://docs.github.com/en/actions">GitHub Actions</a></li>
+<li><a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax">Workflow 문법</a></li>
+<li><a href="https://docs.github.com/en/actions/security-for-github-actions">Actions 보안</a></li>
+<li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">GitHub Pages 게시 소스 설정</a></li>
+<li><a href="https://docs.github.com/en/repositories/releasing-projects-on-github">GitHub Releases</a></li>
+<li><a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a></li>
+</ul>
+<h2 id="section-6">고급 자동화와 AI<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><a href="https://docs.github.com/en/rest">GitHub REST API</a></li>
+<li><a href="https://docs.github.com/en/graphql">GitHub GraphQL API</a></li>
+<li><a href="https://cli.github.com/manual/">GitHub CLI</a></li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions">GitHub Copilot 사용자 지정 지침</a></li>
+</ul>
+<h2 id="section-7">검증이 필요한 항목<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li>GitHub와 Unity의 <strong>요금·스토리지·Actions 사용량·Pages 공개 범위</strong>는 변동 가능성이 있으므로 최신 가격표와 계정 상태를 확인해야 한다.</li>
+<li>Unity 에디터의 <strong>설치 경로, 빌드 API, 테스트 CLI, 라이선스 인증</strong>은 버전별로 다르다. 사용 중인 Unity 버전의 문서를 우선한다.</li>
+<li>GitHub Projects의 <strong>필드·권한·UI</strong>는 저장소/조직 권한과 기능 출시 상태에 따라 달라질 수 있다.</li>
+<li>각 장의 YAML 및 C# 예시는 <strong>교육용이며 실제 사용자 환경에서 실행 검증된 완성 프로젝트는 아니다</strong>. 로컬 실습→로그 분석→작업 환경에 맞춘 조정을 전제로 한다.</li>
+</ul>
+<h2 id="section-8">소프트웨어공학 관점의 원칙<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h2>
+<p>본서가 사용하는 요구사항 → 구현 → 리뷰 → 테스트 → 빌드 → 배포는 <strong>개발 과정의 추적성과 재현성을 높이는 실무 흐름</strong>이다. GitHub 자체가 게임 기획의 재미, 일정의 현실성, 팀원의 동기, 출시 품질을 자동으로 보증한다는 의미는 아니다. 게임 특유의 플레이 경험 검증은 별도 설계·관찰·실험이 필요하다.</p>
+<h2 id="section-9">2026-10-24 확장 내용의 공식 문서<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<p>아래 내용은 이번 보강판에서 새로 다룬 GitHub 기능과 관련된 1차 문서다. 각 기능의 메뉴 위치, 요금제·접근 권한, API·설정 지원 범위는 시간이 지나면서 바뀔 수 있다.</p>
+<ul>
+<li><a href="https://docs.github.com/en/subscriptions-and-notifications/concepts/about-notifications">알림 개요와 설정</a></li>
+<li><a href="https://docs.github.com/en/subscriptions-and-notifications/reference/inbox-filters">Inbox 검색 필터 지원 범위</a></li>
+<li><a href="https://docs.github.com/en/discussions/managing-discussions-for-your-community/managing-categories-for-discussions">Discussions 카테고리 관리</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates">Projects Status Updates</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations">Projects 기본 자동화</a></li>
+<li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/adding-items-automatically">Projects Auto-add와 제한</a></li>
+<li><a href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms">Issue Forms YAML 문법</a></li>
+<li><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets">Rulesets 관련 규칙 목록</a></li>
+<li><a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax">Actions Workflow 문법</a></li>
+<li><a href="https://docs.github.com/en/actions/security-for-github-actions">Actions 보안 설정</a></li>
+<li><a href="https://docs.github.com/en/search-github/github-code-search/understanding-github-code-search-syntax">Code Search 사용법</a></li>
+<li><a href="https://docs.github.com/en/repositories/working-with-files/using-files/viewing-and-understanding-files">파일 History와 Blame</a></li>
+<li><a href="https://docs.github.com/en/code-security/reference/supply-chain-security/dependency-graph-supported-package-ecosystems">Dependabot 지원 생태계 목록</a></li>
+<li><a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/configure-dependabot-alerts">Dependabot alerts</a></li>
+<li><a href="https://docs.unity3d.com/kr/current/Manual/build-command-line.html">Unity 명령줄 빌드</a></li>
+</ul>
+<h3 id="section-10">이 책에서 확인하지 못한 부분<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h3>
+<p>이 문서 패키지를 생성하는 환경에는 사용자의 GitHub 저장소 관리자 권한과 정확한 Unity 프로젝트/라이선스 정보가 없다. 따라서 <strong>실제 GitHub 프로젝트 화면 설정, GitHub Actions 실행 비용, Unity 빌드 성공, 스토어 배포 성공을 실측 검증하지 않았다.</strong> YAML과 코드 예제는 학습용 구성으로 제공하며 테스트 프로젝트에 적용해 검증해야 한다.</p>
+</article><nav class="bottom-nav"><a href="../appendix/templates.html">← 재사용 템플릿</a><a href="../appendix/publishing.html">GitHub Pages 게시 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">Git 기본과 GitHub 저장소</a><a class="level2" href="#section-3">Unity 프로젝트와 에셋</a><a class="level2" href="#section-4">팀 협업과 프로젝트 관리</a><a class="level2" href="#section-5">GitHub Actions와 배포</a><a class="level2" href="#section-6">고급 자동화와 AI</a><a class="level2" href="#section-7">검증이 필요한 항목</a><a class="level2" href="#section-8">소프트웨어공학 관점의 원칙</a><a class="level2" href="#section-9">2026-10-24 확장 내용의 공식 문서</a><a class="level3" href="#section-10">이 책에서 확인하지 못한 부분</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

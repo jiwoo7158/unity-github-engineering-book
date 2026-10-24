@@ -1,0 +1,135 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class=" active" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class="" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">A · Git과 GitHub 기초 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">02. GitHub 기본 사용법<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<h2 id="section-2">2.1 GitHub와 저장소의 관계<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>GitHub는 <strong>Git 저장소를 호스팅</strong>하면서 Issues, Projects, Pull Requests, Actions, Releases, 보안 기능 등 개발 협업 서비스를 제공한다. GitHub에 로그인하는 것은 Git을 설치하는 것과 다르고, GitHub Desktop은 이 서비스를 로컬에서 편하게 다루는 선택형 GUI 앱이다.</p>
+<p>저장소 주소 예: <code>https://github.com/OWNER/aster-arena</code>. <code>OWNER</code>는 개인 계정이나 조직(Organization)이다. 브라우저에서 보이는 <code>Code</code>, <code>Issues</code>, <code>Pull requests</code>, <code>Actions</code>, <code>Projects</code> 등의 탭은 저장소 설정과 권한에 따라 표시 위치가 달라질 수 있다. 특히 Projects는 개인/조직 소유 프로젝트로 별도 존재하며 여러 저장소의 Issue와 PR을 모을 수 있다.</p>
+<h2 id="section-3">2.2 계정과 인증<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<p>GitHub 계정을 만든 후 2단계 인증을 활성화한다. 로컬 Git에서 HTTPS로 원격 저장소에 연결할 때 일반 계정 비밀번호를 직접 사용하는 방식과 GitHub 웹 로그인은 다르다. GitHub Desktop·Git Credential Manager 같은 인증 관리자 또는 SSH Key를 사용할 수 있다.</p>
+<ul>
+<li><strong>HTTPS</strong>: <code>https://github.com/OWNER/REPO.git</code> 주소 사용. 인증 관리자가 토큰을 안전하게 관리할 수 있다.</li>
+<li><strong>SSH</strong>: <code>git@github.com:OWNER/REPO.git</code> 주소 사용. 개인키는 사용자 기기에 보관하고 공개키를 GitHub 계정에 등록한다.</li>
+<li><strong>PAT(Fine-grained Personal Access Token)</strong>: 특정 저장소/권한/기간을 제한한 토큰. 자동화에 불필요하게 광범위한 권한을 주지 않는다.</li>
+<li><strong>GitHub App</strong>: 앱이 설치된 조직·저장소 범위에서 API를 접근하도록 하는 인증 모델. 고급 자동화에서 중요하다.</li>
+</ul>
+<blockquote>
+<p><strong>기밀 정보</strong>
+PAT, SSH 개인키, Unity 라이선스 비밀 정보, Discord Webhook URL을 코드·Issue·스크린샷·Actions 로그에 노출하지 않는다. 유출된 비밀은 삭제 커밋만으로 해결되지 않으므로 즉시 폐기·재발급해야 한다.</p>
+</blockquote>
+<h2 id="section-4">2.3 저장소 생성과 공개 범위<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<p>웹사이트 우측 상단 <code>+ → New repository</code>에서 이름, 설명, 공개 여부를 선택한다. <strong>Public</strong>은 누구나 소스에 접근할 수 있고, <strong>Private</strong>은 권한 있는 사용자 중심으로 접근이 제한된다. 협업에 필요한 기능과 Pages 게시 가능성은 계정·조직 요금제 및 설정을 확인한다.</p>
+<p>새 Unity 프로젝트를 올릴 때 초기화 옵션을 잘 선택해야 한다. 로컬에 이미 커밋이 있다면 GitHub에서 README를 추가한 빈 저장소를 동시에 만들지 않는 편이 첫 푸시 시 불필요한 이력 충돌을 줄인다. 초보자는 GitHub Desktop의 <code>File → Add local repository</code> 또는 <code>Create a repository</code>, 이어 <code>Publish repository</code> 흐름을 쓰면 편리하다.</p>
+<pre><code class="language-bash"># 이미 로컬 Git 저장소가 있는 경우의 예시
+git branch -M main
+git remote add origin https://github.com/OWNER/aster-arena.git
+git remote -v
+git push -u origin main
+</code></pre>
+<p>이미 <code>origin</code>이 연결되어 있다면 <code>remote add</code>를 다시 호출하지 않는다. <code>git remote -v</code>로 확인하고 필요한 경우 <code>git remote set-url origin URL</code>을 사용한다.</p>
+<h2 id="section-5">2.4 개인 Repository와 Organization<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<p>개인 저장소는 개인이 소유한다. Organization은 여러 저장소, 팀, 권한을 조직 단위로 관리하기 위한 공간이다. 소규모 팀도 프로젝트 소유권을 특정 팀원의 개인 계정에 묶지 않으려면 조직 저장소를 고려할 수 있다.</p>
+<table>
+<thead>
+<tr>
+  <th>항목</th>
+  <th>개인 저장소</th>
+  <th>조직 저장소</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>소유권</td>
+  <td>개인 계정 중심</td>
+  <td>조직 중심</td>
+</tr>
+<tr>
+  <td>협업</td>
+  <td>Collaborator 초대</td>
+  <td>조직 Team과 역할 설정</td>
+</tr>
+<tr>
+  <td>팀원 교체</td>
+  <td>소유자 의존 위험 확인</td>
+  <td>역할 및 권한 재배분 용이</td>
+</tr>
+<tr>
+  <td>관리 부담</td>
+  <td>상대적으로 작음</td>
+  <td>조직 설정 관리 필요</td>
+</tr>
+</tbody>
+</table>
+<p>조직/저장소의 역할은 단순한 읽기 권한에서 관리 권한까지 다양하다. 최소 권한을 부여하고, 외부 협업자가 더 이상 참여하지 않을 때 접근을 회수하자.</p>
+<h2 id="section-6">2.5 기본 파일의 의미<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li><code>README.md</code>: 프로젝트의 목적, 설치 환경, 실행 방법, 기여 절차를 안내한다. 기본 화면에 노출되므로 신규 팀원이 읽는 첫 문서다.</li>
+<li><code>.gitignore</code>: 추적하지 않을 새 파일의 패턴을 정의한다. 이미 Git이 추적하는 파일을 나중에 적어도 <strong>자동으로 추적 해제되지 않는다</strong>.</li>
+<li><code>.gitattributes</code>: 파일 속성, 줄바꿈 및 LFS 추적·병합 규칙을 정의한다.</li>
+<li><code>LICENSE</code>: 외부 사용자가 소스 코드를 사용할 수 있는 법적 권한에 영향을 준다. 공개 저장소라는 사실만으로 자유롭게 재사용할 수 있다는 뜻은 아니다.</li>
+<li><code>CONTRIBUTING.md</code>: 브랜치, PR, 테스트, 스타일, 커뮤니케이션 규칙.</li>
+<li><code>.github/</code>: Issue·PR 템플릿, 워크플로, 기여 정책 등 GitHub 관련 설정을 보관한다.</li>
+</ul>
+<h2 id="section-7">2.6 웹에서 확인해야 할 화면<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li><code>Code</code>: 파일, 기본 브랜치, 최근 커밋, Clone 주소.</li>
+<li><code>Commits</code>: 변경 이력과 작성자, 특정 변경 비교.</li>
+<li><code>Branches</code>: 진행 중인 작업 분기와 통합 상태.</li>
+<li><code>Issues</code>: 할 일, 버그, 요구사항. 활성화하지 않았다면 저장소 설정 확인.</li>
+<li><code>Pull requests</code>: 제안된 코드 변경과 리뷰.</li>
+<li><code>Actions</code>: CI와 자동화 실행 결과.</li>
+<li><code>Settings</code>: 권한, 보호 정책, 웹 페이지 배포 및 프로젝트 관리 설정.</li>
+<li><code>Insights</code>: 저장소 활동 정보. Projects의 Insights와 구분.</li>
+</ol>
+<h2 id="section-8">2.7 로컬에서 Clone한 뒤 검증<a class="heading-link" href="#section-8" aria-label="이 단락 링크">#</a></h2>
+<pre><code class="language-bash">git clone https://github.com/OWNER/aster-arena.git
+cd aster-arena
+git remote -v
+git status
+git branch -a
+</code></pre>
+<p>빈 저장소라면 실제 프로젝트 폴더와 구조가 다를 수 있다. Unity 프로젝트를 Clone하는 경우 <code>Assets</code>, <code>Packages</code>, <code>ProjectSettings</code>가 <strong>저장소 루트</strong>에 제대로 위치하는지 확인한다. <code>AsterArena/AsterArena/Assets</code>처럼 중첩된 구조를 의도치 않게 만드는 실수가 흔하다.</p>
+<h2 id="section-9">2.8 입문자가 자주 하는 실수<a class="heading-link" href="#section-9" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li>웹사이트의 <code>Upload files</code>로 큰 Unity 프로젝트를 여러 번 수동 업로드한다 → 버전 관리와 에셋 복원이 어려워진다.</li>
+<li>GitHub Desktop에서 Commit만 하고 Push하지 않는다 → 동료가 변경을 볼 수 없다.</li>
+<li><code>git pull</code>을 무작정 반복한다 → 미커밋 변경이나 충돌의 원인을 놓친다.</li>
+<li>Public 저장소에 유료 에셋이나 라이선스 제한 파일을 넣는다 → 저작권·라이선스 문제가 생길 수 있다.</li>
+<li>프로젝트 소유자 한 명만 모든 관리 권한을 가진다 → 팀원 교체와 장기 유지보수에 위험하다.</li>
+</ul>
+<h2 id="section-10">2.9 실습: 두 위치에서 같은 저장소 사용<a class="heading-link" href="#section-10" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>개인 Private 저장소를 생성한다.</li>
+<li>프로젝트 폴더에서 Git 이력을 만들고 원격 주소를 연결한다.</li>
+<li>README를 커밋하고 푸시한다.</li>
+<li>다른 폴더로 Clone한다.</li>
+<li>두 번째 폴더에서 README를 수정해 푸시한다.</li>
+<li>첫 번째 폴더에서 Fetch/Pull을 하여 변화를 확인한다.</li>
+<li><code>git log --oneline</code>으로 커밋의 이동을 설명한다.</li>
+</ol>
+<p><strong>확인할 결과:</strong> 계정/프로그램/저장소의 차이를 말할 수 있고, 팀원 초대·인증·Clone·Push·Pull을 실제로 완료한다.</p>
+<p><strong>공식 자료:</strong> <a href="https://docs.github.com/en/get-started">GitHub 계정 시작하기</a>, <a href="https://docs.github.com/en/repositories">저장소 관리</a>, <a href="https://docs.github.com/en/desktop">GitHub Desktop</a></p>
+<hr />
+<h2 id="section-11">2.9 확장: Unity 팀을 위한 저장소 설정 점검<a class="heading-link" href="#section-11" aria-label="이 단락 링크">#</a></h2>
+<p>프로젝트가 개인 계정 저장소에 있는지, Organization 저장소에 있는지에 따라 권한과 관리자 책임이 달라진다. 개인 프로젝트를 실제 팀의 공동 작업으로 키우려면 다음 순서로 확인한다.</p>
+<ol>
+<li>저장소 <code>Settings</code>에서 <strong>Public/Private</strong> 상태를 확인한다.</li>
+<li><code>Collaborators</code> 또는 Organization의 <code>People/Teams</code>에서 누가 접근하는지 확인한다.</li>
+<li>팀원의 역할별로 필요한 최소 권한을 부여한다. <code>Read</code>는 확인 중심, <code>Write</code>는 코드 작업, <code>Maintain/Admin</code>은 더 큰 관리 권한을 포함하므로 무작정 모두에게 관리자 권한을 주지 않는다.</li>
+<li>저장소 기본 브랜치를 <code>main</code> 등 명확한 이름으로 합의한다.</li>
+<li>Issues, Discussions, Projects 등 필요한 기능이 켜져 있는지 확인한다.</li>
+<li>프로젝트에서 공개하면 안 되는 소스와 에셋의 라이선스를 확인한다.</li>
+<li>복구 담당자, 백업 위치, 팀장이 졸업하거나 프로젝트에서 빠질 때의 소유권 이전 절차를 정한다.</li>
+</ol>
+<p><strong>개인 저장소와 Organization의 차이</strong>: 개인 저장소는 시작이 빠르지만, 계정 소유자에게 설정이 집중되기 쉽다. Organization은 팀 구성원·저장소 권한을 보다 체계적으로 관리할 수 있지만 초기 운영 부담이 생긴다. 어느 쪽이든 프로젝트의 장기적인 소유권과 접근 권한을 먼저 합의하자.</p>
+<h3 id="section-12">GitHub Desktop을 사용하는 팀원과 CLI를 사용하는 팀원이 섞인 경우<a class="heading-link" href="#section-12" aria-label="이 단락 링크">#</a></h3>
+<p>명령줄이나 GUI의 선택은 서로 달라도 된다. 다만 저장소의 <strong>공통 규칙은 같아야 한다</strong>.</p>
+<ul>
+<li>동일한 기본 브랜치와 브랜치 이름 정책을 사용한다.</li>
+<li><code>.gitignore</code> 및 <code>.gitattributes</code> 규칙은 Repository에서 공유한다.</li>
+<li><code>commit → push → PR → review → merge</code>가 실제로 같은 변경 결과를 만든다.</li>
+<li>충돌 해결 후 Unity에서 프로젝트를 열어 확인한다.</li>
+</ul>
+<p><strong>학습 확인:</strong> 저장소를 팀원에게 전달하면서 '어떤 계정 권한이 필요한지', '코드는 어디에서 받을 수 있는지', '작업은 어느 화면에서 확인하는지'를 구두 설명 없이 문서로 전달할 수 있다.</p>
+<p><strong>공식 자료:</strong> <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/managing-repository-settings">저장소 권한</a> · <a href="https://docs.github.com/en/organizations">Organization</a></p>
+</article><nav class="bottom-nav"><a href="../part-a/01-git-fundamentals.html">← 01 Git의 기본 원리</a><a href="../part-b/03-unity-repository.html">03 Unity 저장소 구성 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">2.1 GitHub와 저장소의 관계</a><a class="level2" href="#section-3">2.2 계정과 인증</a><a class="level2" href="#section-4">2.3 저장소 생성과 공개 범위</a><a class="level2" href="#section-5">2.4 개인 Repository와 Organization</a><a class="level2" href="#section-6">2.5 기본 파일의 의미</a><a class="level2" href="#section-7">2.6 웹에서 확인해야 할 화면</a><a class="level2" href="#section-8">2.7 로컬에서 Clone한 뒤 검증</a><a class="level2" href="#section-9">2.8 입문자가 자주 하는 실수</a><a class="level2" href="#section-10">2.9 실습: 두 위치에서 같은 저장소 사용</a><a class="level2" href="#section-11">2.9 확장: Unity 팀을 위한 저장소 설정 점검</a><a class="level3" href="#section-12">GitHub Desktop을 사용하는 팀원과 CLI를 사용하는 팀원이 섞인 경우</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>

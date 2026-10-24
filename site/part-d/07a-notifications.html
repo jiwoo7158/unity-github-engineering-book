@@ -1,0 +1,112 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>부록 E. MkDocs로 책을 읽고 GitHub Pages에 게시하기 · Unity GitHub 실무 교과서</title><link rel="stylesheet" href="../assets/style.css"></head><body>
+    <div class="reading"></div><header><button class="mobile-toggle" aria-label="목차 열기">☰</button><a class="logo" href="../index.html"><span class="brand-dot"></span>Unity × GitHub 실무 교과서</a><span class="note">소규모 게임 개발 · 소프트웨어공학</span><input id="search" autocomplete="off" placeholder="전체 교재 검색 (2글자 이상)" aria-label="책 검색"></header>
+    <div class="search-results" id="search-results"></div><div class="shell"><aside class="sidebar"><div class="sidebar-group">소개</div><a class="" href="../index.html">시작하기</a><div class="sidebar-group">A · Git과 GitHub 기초</div><a class="" href="../part-a/01-git-fundamentals.html">01 Git의 기본 원리</a><a class="" href="../part-a/02-github-basics.html">02 GitHub 기본 사용법</a><div class="sidebar-group">B · Unity 프로젝트 관리</div><a class="" href="../part-b/03-unity-repository.html">03 Unity 저장소 구성</a><a class="" href="../part-b/04-lfs-merge-uvcs.html">04 대용량 에셋과 충돌</a><div class="sidebar-group">C · 팀 협업</div><a class="" href="../part-c/05-branch-pr-review.html">05 브랜치와 Pull Request</a><div class="sidebar-group">D · 요구사항과 작업</div><a class="" href="../part-d/06-issues.html">06 GitHub Issues</a><a class="" href="../part-d/07-projects.html">07 GitHub Projects</a><a class=" active" href="../part-d/07a-notifications.html">07-A 알림 관리</a><a class="" href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고</a><div class="sidebar-group">E · 자동화와 빌드</div><a class="" href="../part-e/08-actions.html">08 GitHub Actions</a><a class="" href="../part-e/09-unity-tests-ci.html">09 Unity 테스트와 CI</a><a class="" href="../part-e/10-unity-build-release.html">10 Unity 자동 빌드와 CD</a><div class="sidebar-group">F · 운영과 확장</div><a class="" href="../part-f/11-docs-release-security.html">11 문서·릴리스·보안</a><a class="" href="../part-f/11a-code-search-security.html">11-A 코드 검색·Dependabot·보안</a><a class="" href="../part-f/12-automation-ai-integration.html">12 고급 자동화·AI·연동</a><div class="sidebar-group">참고 자료</div><a class="" href="../appendix/integrated-lab.html">종합 실습</a><a class="" href="../appendix/troubleshooting.html">문제 해결</a><a class="" href="../appendix/glossary.html">용어 사전</a><a class="" href="../appendix/templates.html">재사용 템플릿</a><a class="" href="../appendix/references.html">공식 문서와 검증 범위</a><a class="" href="../appendix/publishing.html">GitHub Pages 게시</a></aside><main><div class="meta">D · 요구사항과 작업 · 2026년 10월 24일 보강</div><article class="article"><h1 id="section-1">07-A. GitHub Notifications: 작업을 놓치지 않는 알림 체계<a class="heading-link" href="#section-1" aria-label="이 단락 링크">#</a></h1>
+<blockquote>
+<p><strong>이 장의 위치</strong>: 06장 Issues와 07장 Projects를 배운 뒤 읽는다. 기능은 별도의 설치 프로그램이 아닌 GitHub 웹사이트의 알림 서비스이며, GitHub Mobile이나 이메일을 함께 이용할 수 있다.</p>
+</blockquote>
+<h2 id="section-2">A.1 알림과 작업 목록은 다르다<a class="heading-link" href="#section-2" aria-label="이 단락 링크">#</a></h2>
+<p>소규모 게임 개발팀에서 '공지에 읽었다고 답했는데 실제 작업은 진행하지 않았다'는 문제는 <strong>알림을 확인하는 행위</strong>와 <strong>작업을 완수하는 행위</strong>를 혼동할 때 심해진다. GitHub Notifications는 메시지를 놓치지 않도록 돕지만, 프로젝트의 해야 할 일 목록은 GitHub Projects와 Issues에 남겨야 한다.</p>
+<table>
+<thead>
+<tr>
+  <th>구성 요소</th>
+  <th>무슨 역할인가</th>
+  <th>팀원의 행동</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>GitHub Notifications</td>
+  <td>내가 확인해야 할 변경·대화 알림</td>
+  <td>읽기, 답변, 추적 여부 결정</td>
+</tr>
+<tr>
+  <td>GitHub Issues</td>
+  <td>담당 업무·버그·결정 기록</td>
+  <td>작업 조건 확인, 결과 제출</td>
+</tr>
+<tr>
+  <td>GitHub Projects</td>
+  <td>지금 해야 할 일과 진행 단계</td>
+  <td>우선순위 선택, 상태 갱신</td>
+</tr>
+<tr>
+  <td>Discord</td>
+  <td>빠른 질문·회의·즉시 협의</td>
+  <td>논의하고 최종 결정을 Issue에 반영</td>
+</tr>
+</tbody>
+</table>
+<p><strong>운영 규칙 예시</strong>: 작업 할당이나 기술 결정은 반드시 Issue를 통해 남긴다. Discord는 링크를 전달할 수 있지만, Discord 메시지만으로 새 과업을 공식 배정하지 않는다.</p>
+<h2 id="section-3">A.2 알림이 발생하는 대표적인 상황<a class="heading-link" href="#section-3" aria-label="이 단락 링크">#</a></h2>
+<ul>
+<li>내가 어떤 Issue 또는 PR의 담당자(Assignee)로 지정됨.</li>
+<li>누군가 댓글에서 <code>@사용자명</code>으로 나를 언급함.</li>
+<li>내가 참여하거나 구독한 대화에 새 댓글이 달림.</li>
+<li>내가 리뷰어로 요청됨.</li>
+<li>저장소나 특정 대화를 <strong>Watch / Subscribe</strong> 하여 새로운 활동을 추적함.</li>
+</ul>
+<p>모든 상황에서 동일한 알림을 받는 것은 아니다. 저장소 Watch 설정, 계정 알림 설정, 조직 정책, 메일 설정에 따라 달라질 수 있다. <strong>담당자로 지정했다고 반드시 이메일을 읽거나 작업을 이해했다는 뜻은 아니다.</strong></p>
+<h2 id="section-4">A.3 웹사이트에서 확인하는 방법<a class="heading-link" href="#section-4" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>GitHub 로그인 후 오른쪽 위의 종(bell) 아이콘 또는 <code>https://github.com/notifications</code>로 이동한다.</li>
+<li>Inbox에서 읽지 않은 알림을 확인한다.</li>
+<li>개별 항목을 열어 <strong>어떤 저장소의 어떤 Issue/PR</strong>에 관한 알림인지 확인한다.</li>
+<li>지금 처리할 알림은 링크된 Issue에서 답변하거나 작업 상태를 갱신한다.</li>
+<li>나중에 처리할 것은 Saved 등 사용 가능한 보관 기능을 활용하고, 처리한 알림은 Done으로 정리한다.</li>
+<li><code>Settings → Notifications</code>에서 웹·이메일·모바일 알림 수단을 조정한다.</li>
+</ol>
+<p>알림 UI는 수시로 변경될 수 있다. 화면에서 항목 이름이 달라졌다면 <a href="https://docs.github.com/en/subscriptions-and-notifications/concepts/about-notifications">Notifications 공식 문서</a>를 기준으로 확인하자.</p>
+<h2 id="section-5">A.4 너무 많은 알림을 줄이는 방법<a class="heading-link" href="#section-5" aria-label="이 단락 링크">#</a></h2>
+<p><strong>무작정 전체 저장소를 Watch하지 않는다.</strong> 중요한 저장소는 Custom Watch 설정으로 필요한 이벤트를 선택하고, 자주 발생하는 자동 알림이 업무를 가리지 않도록 한다.</p>
+<p>GitHub Inbox에서는 <code>repo:</code>, <code>reason:</code>, <code>org:</code> 등의 조건을 사용하는 사용자 정의 필터가 지원된다. 예를 들어 특정 프로젝트의 알림만 따로 모아 팀장의 확인 부담을 줄일 수 있다. 다만 <strong>Inbox 필터는 GitHub Issues의 검색 문법과 완전히 같지 않다</strong>. 지원 검색어와 제한은 공식 문서에서 확인해야 한다.</p>
+<table>
+<thead>
+<tr>
+  <th>필터링 필요</th>
+  <th>실무 적용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>내가 언급된 것 먼저</td>
+  <td>직접 답변이 필요한 질문을 우선 확인</td>
+</tr>
+<tr>
+  <td>프로젝트 저장소 관련만</td>
+  <td>다른 개인 저장소 알림과 분리</td>
+</tr>
+<tr>
+  <td>리뷰 요청 관련</td>
+  <td>코드 통합이 멈추지 않도록 확인</td>
+</tr>
+<tr>
+  <td>저장한 알림</td>
+  <td>즉시 처리하지 못한 중요한 논의 재방문</td>
+</tr>
+</tbody>
+</table>
+<p><strong>주의:</strong> 알림의 <code>Read</code>/<code>Done</code>은 <strong>개발 작업 완료가 아니다</strong>. Issue의 상태를 바꾸는 행위와 구분한다.</p>
+<h2 id="section-6">A.5 소규모 팀의 알림 규칙<a class="heading-link" href="#section-6" aria-label="이 단락 링크">#</a></h2>
+<ol>
+<li>새 작업은 Issue에 등록하고 담당자를 지정한다.</li>
+<li>특정 팀원의 판단이 필요하면 해당 Issue의 댓글에서 명확한 질문과 함께 <code>@mention</code>한다.</li>
+<li>긴급한 장애나 당일 회의 일정은 Discord에서 빠르게 알려도 좋지만, 해결 내용은 Issue에 기록한다.</li>
+<li>담당자가 막혔다면 '안 되는 중'이라고만 쓰지 말고 <strong>재현 과정·이미 시도한 방법·필요한 도움</strong>을 남긴다.</li>
+<li>팀장은 정기적으로 알림 개수보다 <strong>미배정 작업과 막힌 작업</strong>을 확인한다.</li>
+</ol>
+<h2 id="section-7">A.6 실습: 담당자와 리뷰어 알림<a class="heading-link" href="#section-7" aria-label="이 단락 링크">#</a></h2>
+<p><strong>실습 준비</strong>: 가능하면 두 개의 실습 계정 또는 동료 1명, 테스트 저장소 1개를 준비한다. 개인 계정을 추가로 만드는 것 자체는 필수 조건이 아니다.</p>
+<ol>
+<li>A가 <code>#31 회피 애니메이션 구현</code> Issue를 만들고 B를 Assignee로 지정한다.</li>
+<li>B가 알림을 확인한 뒤 '선행 애니메이션이 필요합니다'라고 댓글로 문의한다.</li>
+<li>A가 해당 댓글에서 B를 언급해 질문에 답한다.</li>
+<li>B가 PR을 생성하고 A에게 리뷰를 요청한다.</li>
+<li>A는 리뷰 알림을 확인한다. PR 통과와 별개로 기능이 Unity에서 검증되었는지 판단한다.</li>
+<li>두 사람은 Projects의 상태가 담당자/리뷰어의 알림 처리만으로 변경되지 않는다는 점을 확인한다.</li>
+</ol>
+<p><strong>완료 기준</strong>: 팀원이 '내가 확인해야 할 알림'과 '내가 완료해야 할 작업'을 각각 어디에서 찾는지 설명할 수 있다.</p>
+<p><strong>문제 해결</strong>: 알림이 오지 않는다면 Watch/Subscribe 상태, 계정별 Notifications 설정, 조직·저장소 접근 권한, 이메일 수신 설정을 순서대로 확인한다. GitHub 설정만으로 외부 메신저의 읽음 여부나 참석 의사를 알 수는 없다.</p>
+<p><strong>공식 자료</strong>: <a href="https://docs.github.com/en/subscriptions-and-notifications/concepts/about-notifications">GitHub 알림 개요</a> · <a href="https://docs.github.com/en/subscriptions-and-notifications/reference/inbox-filters">Inbox 필터</a> · <a href="https://docs.github.com/en/subscriptions-and-notifications">알림 관리</a></p>
+</article><nav class="bottom-nav"><a href="../part-d/07-projects.html">← 07 GitHub Projects</a><a href="../part-d/07b-discussions-status.html">07-B Discussions와 상태 보고 →</a></nav></main><aside class="toc"><div class="toc-title">이 페이지에서</div><a class="level2" href="#section-2">A.1 알림과 작업 목록은 다르다</a><a class="level2" href="#section-3">A.2 알림이 발생하는 대표적인 상황</a><a class="level2" href="#section-4">A.3 웹사이트에서 확인하는 방법</a><a class="level2" href="#section-5">A.4 너무 많은 알림을 줄이는 방법</a><a class="level2" href="#section-6">A.5 소규모 팀의 알림 규칙</a><a class="level2" href="#section-7">A.6 실습: 담당자와 리뷰어 알림</a></aside></div>
+    <script>window.SITE_ROOT="../";</script><script src="../assets/index-data.js"></script><script src="../assets/search.js"></script></body></html>
